@@ -29,7 +29,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Corman Leigh · Corman PMT",
+  title: "Corman Leigh · Corman CMS",
   description: "Homebuilder platform — lead to warranty on one record.",
 };
 

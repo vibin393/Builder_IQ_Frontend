@@ -14,7 +14,7 @@ export default function Root() {
 
   return (
     <main className="flex min-h-screen items-center justify-center text-sm" style={{ color: "var(--fg-subtle)" }}>
-      Corman PMT…
+      Corman CMS…
     </main>
   );
 }

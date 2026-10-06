@@ -1,5 +1,5 @@
 /**
- * Typed client for the Corman PMT API.
+ * Typed client for the Corman CMS API.
  *
  * Tokens live in localStorage for now. Before production this should move to
  * httpOnly cookies - localStorage is readable by any injected script.
