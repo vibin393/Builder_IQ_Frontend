@@ -10,6 +10,7 @@ import { useIssuePurchaseOrder } from "@/components/IssuePurchaseOrder";
 import {
   Badge,
   Card,
+  CheckboxField,
   DataTable,
   ErrorNote,
   Field,
@@ -135,10 +136,7 @@ export default function PurchaseOrdersPage() {
             <option key={v.id} value={v.id}>{v.name}</option>
           ))}
         </select>
-        <label className="flex items-center gap-1.5 text-sm">
-          <input type="checkbox" checked={overdueOnly} onChange={(e) => setOverdueOnly(e.target.checked)} />{" "}
-          Late only
-        </label>
+        <CheckboxField className="flex items-center gap-1.5 text-sm" checked={overdueOnly} onChange={(e) => setOverdueOnly(e.target.checked)} label="Late only" />
       </div>
 
       <Card padded={false}>

@@ -7,6 +7,7 @@ import {
   Badge,
   Card,
   DataTable,
+  CheckboxField,
   ErrorNote,
   Field,
   Loading,
@@ -264,14 +265,7 @@ export default function DocumentsPage() {
                     </option>
                   ))}
                 </select>
-                <label className="flex items-center gap-1.5 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={expiringOnly}
-                    onChange={(e) => setExpiringOnly(e.target.checked)}
-                  />{" "}
-                  Expiring
-                </label>
+                <CheckboxField className="flex items-center gap-1.5 text-sm" checked={expiringOnly} onChange={(e) => setExpiringOnly(e.target.checked)} label="Expiring" />
               </div>
             }
           >

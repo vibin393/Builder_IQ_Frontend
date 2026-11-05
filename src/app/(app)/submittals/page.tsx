@@ -6,6 +6,7 @@ import { useState } from "react";
 import {
   Badge,
   Card,
+  CheckboxField,
   DataTable,
   ErrorNote,
   Field,
@@ -402,10 +403,7 @@ export default function SubmittalsPage() {
           <Field label="Description">
             <textarea name="description" className="input" rows={2} />
           </Field>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="submit_now" defaultChecked />{" "}
-            Submit for review now (otherwise saved as a draft)
-          </label>
+          <CheckboxField name="submit_now" defaultChecked label="Submit for review now (otherwise saved as a draft)" />
           <p className="text-xs" style={{ color: "var(--fg-subtle)" }}>
             Leave the review due date blank and it is set from the priority — urgent 3 days,
             high 7, normal 10, low 14. Needed-on-site and lead time drive the procurement warning.

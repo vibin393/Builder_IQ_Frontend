@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type InputHTMLAttributes,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 
 import { Spinner } from "@/components/Button";
@@ -338,6 +345,21 @@ export function Field({
           {hint}
         </span>
       )}
+    </label>
+  );
+}
+
+/** A checkbox with an inline label. Accepts any native input props (controlled
+ *  or uncontrolled), so the one component replaces the checkbox+label block that
+ *  was otherwise repeated across the filter bars and forms. */
+export function CheckboxField({
+  label,
+  className = "flex items-center gap-2 text-sm",
+  ...input
+}: { label: ReactNode; className?: string } & InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <label className={className}>
+      <input {...input} type="checkbox" /> {label}
     </label>
   );
 }

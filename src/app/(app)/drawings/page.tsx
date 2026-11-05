@@ -6,6 +6,7 @@ import { Button } from "@/components/Button";
 import {
   Badge,
   Card,
+  CheckboxField,
   DataTable,
   ErrorNote,
   Field,
@@ -818,10 +819,7 @@ export default function DrawingsPage() {
           <Field label="Body">
             <textarea name="body" className="input" rows={5} />
           </Field>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="issue_now" defaultChecked />{" "}
-            Issue now (otherwise saved as a draft)
-          </label>
+          <CheckboxField name="issue_now" defaultChecked label="Issue now (otherwise saved as a draft)" />
           <div className="flex justify-end gap-2">
             <button type="button" className="btn btn-ghost" onClick={() => setNewSpec(false)}>
               Cancel
