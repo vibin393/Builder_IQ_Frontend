@@ -29,3 +29,6 @@ yarn-error.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Excluded from GitHub/SonarQube push (kept locally for builds)
+Dockerfile

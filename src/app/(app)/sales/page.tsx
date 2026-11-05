@@ -37,9 +37,13 @@ function SalesMap({ points }: { points: LeadMapPoint[] }) {
     if ((window as unknown as { L?: unknown }).L) { setReady(true); return; }
     const css = document.createElement("link");
     css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    css.integrity = "sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H";
+    css.crossOrigin = "anonymous";
     document.head.appendChild(css);
     const sc = document.createElement("script");
     sc.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; sc.async = true;
+    sc.integrity = "sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH";
+    sc.crossOrigin = "anonymous";
     sc.onload = () => setReady(true);
     document.body.appendChild(sc);
   }, []);

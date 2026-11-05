@@ -25,13 +25,19 @@ function loadLeaflet(): Promise<any> {
   if ((window as any).L) return Promise.resolve((window as any).L);
   if (leafletPromise) return leafletPromise;
   leafletPromise = new Promise((resolve, reject) => {
+    // SRI hashes below pin Leaflet 1.9.4 (cdnjs minified build). If
+    // LEAFLET_VERSION changes, regenerate both from the cdnjs SRI metadata.
     const css = document.createElement("link");
     css.rel = "stylesheet";
     css.href = `https://cdnjs.cloudflare.com/ajax/libs/leaflet/${LEAFLET_VERSION}/leaflet.min.css`;
+    css.integrity = "sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==";
+    css.crossOrigin = "anonymous";
     document.head.appendChild(css);
     const js = document.createElement("script");
     js.src = `https://cdnjs.cloudflare.com/ajax/libs/leaflet/${LEAFLET_VERSION}/leaflet.min.js`;
     js.async = true;
+    js.integrity = "sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==";
+    js.crossOrigin = "anonymous";
     js.onload = () => resolve((window as any).L);
     js.onerror = () => reject(new Error("Could not load the map library."));
     document.head.appendChild(js);
