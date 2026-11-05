@@ -915,6 +915,9 @@ function CaptureLead({
     price_max: "",
     bedrooms_needed: "",
     desired_move_in: "",
+    project_type: "",
+    confidence: "",
+    projected_sales_date: "",
     is_prequalified: false,
     lender_name: "",
     financing_type: "",
@@ -1112,6 +1115,15 @@ function CaptureLead({
             </Field>
             <Field label="Wants to move in" hint="A school-year deadline outranks price.">
               <input type="date" className="input" value={form.desired_move_in} onChange={set("desired_move_in")} />
+            </Field>
+            <Field label="Project type" hint="New build, remodel, addition, ADU…">
+              <input className="input" value={form.project_type} onChange={set("project_type")} />
+            </Field>
+            <Field label="Confidence %" hint="Win probability — weights the forecast.">
+              <input type="number" min={0} max={100} className="input" value={form.confidence} onChange={set("confidence")} />
+            </Field>
+            <Field label="Projected sales date" hint="When the sale is expected to close.">
+              <input type="date" className="input" value={form.projected_sales_date} onChange={set("projected_sales_date")} />
             </Field>
           </div>
         </section>

@@ -4,7 +4,7 @@
 
 :root {
   /* ---------------------------------------------------------------------
-     Corman Leigh brand palette.
+     Titan CR Inc brand palette.
      Sampled from the supplied logo: #0f172a navy, #00274c deep brand navy,
      #f1f5f9 near-white, #0f98cc accent, #305c81 monogram steel.
      --------------------------------------------------------------------- */
@@ -2370,6 +2370,37 @@ html.guide-mode main th:hover {
   align-items: center;
   gap: 0.6rem;
   min-width: 0;
+}
+
+/* Image-based Titan CR Inc lockup: wordmark artwork stacked over an optional subtitle. */
+.logo-lockup-img {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.28rem;
+}
+.logo-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 9px;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+  max-width: 100%;
+}
+.logo-plate-img {
+  display: block;
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+.logo-fallback {
+  font-family: var(--font-brand-stack);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.015em;
+  color: var(--fg);
 }
 
 /* One declaration only. The padding lives on the image, not the box, so the

@@ -245,6 +245,114 @@ export const Icons = {
       <path d="M12 16.8h.01" />
     </Svg>
   ),
+  // --- added so every nav item has its own glyph ---
+  salesDesk: (p: IconProps) => (
+    <Svg {...p}>
+      <rect x="3" y="7" width="18" height="12" rx="2" />
+      <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
+      <path d="M3 13h18" />
+    </Svg>
+  ),
+  map: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" />
+      <path d="M9 4v14M15 6v14" />
+    </Svg>
+  ),
+  labels: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M3 7a2 2 0 0 1 2-2h6l9 9-6 6-9-9V7Z" />
+      <circle cx="7.5" cy="9.5" r="1.3" />
+    </Svg>
+  ),
+  updates: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M21 12a9 9 0 1 1-2.6-6.3" />
+      <path d="M21 4v5h-5" />
+    </Svg>
+  ),
+  notifications: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z" />
+      <path d="M10.5 19a1.8 1.8 0 0 0 3 0" />
+    </Svg>
+  ),
+  clock: (p: IconProps) => (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.5 2" />
+    </Svg>
+  ),
+  messages: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1Z" />
+    </Svg>
+  ),
+  comments: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M4 5h16a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8l-4 4V6a1 1 0 0 1 1-1Z" />
+      <path d="M8 9h8M8 12h5" />
+    </Svg>
+  ),
+  photos: (p: IconProps) => (
+    <Svg {...p}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="8.5" cy="9.5" r="1.6" />
+      <path d="m4 18 5-5 4 4 3-3 4 4" />
+    </Svg>
+  ),
+  videos: (p: IconProps) => (
+    <Svg {...p}>
+      <rect x="3" y="6" width="13" height="12" rx="2" />
+      <path d="m16 10 5-3v10l-5-3Z" />
+    </Svg>
+  ),
+  proposals: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
+      <path d="M14 3v4h4" />
+      <path d="M12 10.5v6M9.5 12.5h3.3a1.4 1.4 0 0 1 0 2.8H10" />
+    </Svg>
+  ),
+  estimates: (p: IconProps) => (
+    <Svg {...p}>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <path d="M8 7h8" />
+      <path d="M8 11h2M12 11h2M16 11h0.01M8 14h2M12 14h2M16 14h0.01M8 17h2M12 17h2" />
+    </Svg>
+  ),
+  costInbox: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M3 13h5l1.5 2.5h5L16 13h5" />
+      <path d="M5 5h14l2 8v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-5L5 5Z" />
+    </Svg>
+  ),
+  clientInvoices: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" />
+      <path d="M9 8h6M9 12h6" />
+    </Svg>
+  ),
+  signoff: (p: IconProps) => (
+    <Svg {...p}>
+      <rect x="6" y="4" width="12" height="17" rx="2" />
+      <path d="M9 4V3h6v1" />
+      <path d="m9 13 2 2 4-4" />
+    </Svg>
+  ),
+  scorecard: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.2l5.9-.9L12 3Z" />
+    </Svg>
+  ),
+  directory: (p: IconProps) => (
+    <Svg {...p}>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <circle cx="12" cy="10" r="2.2" />
+      <path d="M8.5 16a3.5 3.5 0 0 1 7 0" />
+      <path d="M3 7h2M3 12h2M3 17h2" />
+    </Svg>
+  ),
   chevron: (p: IconProps) => (
     <Svg {...p}>
       <path d="m9 6 6 6-6 6" />

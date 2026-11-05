@@ -59,6 +59,8 @@ import type {
   HoldReason,
   Holiday,
   HomeownerHome,
+  BuyerInvoice,
+  BuyerUpdate,
   FieldSummary,
   Incident,
   IncidentType,
@@ -132,8 +134,31 @@ import type {
   ScheduleTemplate,
   ScheduleSummary,
   ScheduleTemplateTask,
+  ActivityEvent,
+  ClientUpdate,
+  Comment,
+  CostInboxItem,
+  CostInboxSummary,
+  DirectoryContact,
+  Estimate,
+  EstimateListRow,
+  InboxSummary,
+  LeadMapPoint,
+  LeadProposal,
+  MessageItem,
+  ProposalTemplate,
+  SalesCalendarEvent,
+  DirectorySummary,
+  OwnerInvoice,
+  OwnerInvoiceSummary,
   Selection,
+  ThreadSummary,
+  Shift,
+  ShiftMapPoint,
+  TimeClockSummary,
   SelectionCascade,
+  SelectionSignoff,
+  SignoffSummary,
   ServiceOrder,
   SignatureRequest,
   Specification,
@@ -245,7 +270,50 @@ export const tokenStore = {
   },
 };
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+/**
+ * Exchange the refresh token for a fresh pair. Single-flight: if several requests
+ * 401 at once (a page firing many calls), they share ONE refresh instead of
+ * stampeding the endpoint. Returns true when new tokens are stored.
+ */
+let refreshInFlight: Promise<boolean> | null = null;
+function refreshTokens(): Promise<boolean> {
+  if (refreshInFlight) return refreshInFlight;
+  refreshInFlight = (async () => {
+    let rt: string | null = null;
+    try {
+      rt = typeof window !== "undefined" ? window.localStorage.getItem(REFRESH_KEY) : null;
+    } catch {
+      rt = null;
+    }
+    if (!rt) return false;
+    try {
+      const res = await fetch(`${API_URL}${API_PREFIX}/auth/refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh_token: rt }),
+      });
+      if (!res.ok) return false;
+      tokenStore.set((await res.json()) as TokenPair);
+      return true;
+    } catch {
+      return false;
+    }
+  })();
+  refreshInFlight.finally(() => {
+    refreshInFlight = null;
+  });
+  return refreshInFlight;
+}
+
+/** Session is over: drop tokens and send the user to the sign-in page once. */
+function forceLogout() {
+  tokenStore.clear();
+  if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
+    window.location.assign("/login?expired=1");
+  }
+}
+
+async function request<T>(path: string, init: RequestInit = {}, isRetry = false): Promise<T> {
   const headers = new Headers(init.headers);
   headers.set("Content-Type", "application/json");
 
@@ -253,6 +321,20 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${API_URL}${API_PREFIX}${path}`, { ...init, headers });
+
+  // An expired/invalid access token: try to refresh once and replay the call.
+  // Only the credential endpoints are excluded so a bad login/refresh can't loop;
+  // /auth/me and every data route still get the refresh-and-retry.
+  const skipRefresh =
+    path.startsWith("/auth/login") ||
+    path.startsWith("/auth/refresh") ||
+    path.startsWith("/auth/register");
+  if (res.status === 401 && !isRetry && !skipRefresh && tokenStore.access) {
+    const refreshed = await refreshTokens();
+    if (refreshed) return request<T>(path, init, true);
+    forceLogout();
+    throw new ApiError("Your session has expired. Please sign in again.", 401);
+  }
 
   if (!res.ok) {
     let detail = res.statusText;
@@ -604,6 +686,191 @@ export const api = {
       `/jobs/${jobId}/selections/${selectionId}/cancel`,
     ),
 
+  // Materials selection signoff — the customer's approval of chosen materials.
+  signoffSummary: (jobId?: string) =>
+    get<SignoffSummary>(`/signoff/summary${qs({ job_id: jobId })}`),
+  listSignoff: (jobId: string, approval_status?: string) =>
+    get<SelectionSignoff[]>(`/signoff${qs({ job_id: jobId, approval_status })}`),
+  requestSelectionApproval: (
+    jobId: string,
+    body: { deadline?: string | null; selection_ids?: string[] | null },
+  ) => post<SelectionSignoff[]>(`/signoff/jobs/${jobId}/request-approval`, body),
+  approveSelection: (id: string, body: { signature: string; comment?: string | null }) =>
+    post<SelectionSignoff>(`/signoff/${id}/approve`, body),
+  declineSelection: (
+    id: string,
+    body: { reason: string; signature?: string | null; comment?: string | null },
+  ) => post<SelectionSignoff>(`/signoff/${id}/decline`, body),
+  resetSelectionSignoff: (id: string) => post<SelectionSignoff>(`/signoff/${id}/reset`),
+  setSelectionAllowance: (id: string, body: { allowance_amount?: number | null; requires_client_selection?: boolean }) =>
+    patch<SelectionSignoff>(`/signoff/${id}/allowance`, body),
+  addSelectionChoice: (id: string, body: { description: string; price?: number; option_id?: string | null; sort_order?: number }) =>
+    post<SelectionSignoff>(`/signoff/${id}/choices`, body),
+  selectSelectionChoice: (choiceId: string) => post<SelectionSignoff>(`/signoff/choices/${choiceId}/select`),
+  deleteSelectionChoice: (choiceId: string) => del<SelectionSignoff>(`/signoff/choices/${choiceId}`),
+
+  // Unified directory — every contact (team, trades, customers, realtors).
+  directorySummary: () => get<DirectorySummary>("/directory/summary"),
+  listDirectory: (params: { type?: string; search?: string } = {}) =>
+    get<DirectoryContact[]>(`/directory${qs(params)}`),
+
+  // Sales — lead proposals, calendar, lead map.
+  listLeadProposals: (params: { lead_id?: string; proposal_status?: string } = {}) =>
+    get<LeadProposal[]>(`/lead-proposals${qs(params)}`),
+  createLeadProposal: (body: { lead_id: string; title: string; amount?: number; valid_until?: string | null; notes?: string | null }) =>
+    post<LeadProposal>("/lead-proposals", body),
+  updateLeadProposal: (id: string, body: Record<string, unknown>) => patch<LeadProposal>(`/lead-proposals/${id}`, body),
+  deleteLeadProposal: (id: string) => del(`/lead-proposals/${id}`),
+  sendLeadProposal: (id: string) => post<LeadProposal>(`/lead-proposals/${id}/send`),
+  acceptLeadProposal: (id: string) => post<LeadProposal>(`/lead-proposals/${id}/accept`),
+  declineLeadProposal: (id: string) => post<LeadProposal>(`/lead-proposals/${id}/decline`),
+  getLeadProposal: (id: string) => get<LeadProposal>(`/lead-proposals/${id}`),
+  listProposalTemplates: () => get<ProposalTemplate[]>("/proposal-templates"),
+  deleteProposalTemplate: (id: string) => del(`/proposal-templates/${id}`),
+  applyProposalTemplate: (proposalId: string, templateId: string) =>
+    post<LeadProposal>(`/lead-proposals/${proposalId}/apply-template/${templateId}`),
+  saveProposalAsTemplate: (proposalId: string, body: { name: string; description?: string | null }) =>
+    post<ProposalTemplate>(`/lead-proposals/${proposalId}/save-as-template`, body),
+  addProposalItem: (id: string, body: { description: string; group_name?: string; unit?: string | null; quantity?: number; unit_cost?: number; markup_percent?: number }) =>
+    post<LeadProposal>(`/lead-proposals/${id}/items`, body),
+  deleteProposalItem: (itemId: string) => del<LeadProposal>(`/proposal-items/${itemId}`),
+  salesCalendar: (params: { start?: string; end?: string } = {}) =>
+    get<SalesCalendarEvent[]>(`/sales-calendar${qs(params)}`),
+  leadMap: () => get<LeadMapPoint[]>("/leads/map"),
+
+  // Estimates — the proposal builder.
+  listEstimates: (jobId?: string) => get<EstimateListRow[]>(`/estimates${qs({ job_id: jobId })}`),
+  getEstimate: (id: string) => get<Estimate>(`/estimates/${id}`),
+  createEstimate: (body: { job_id: string; title: string; default_markup_percent?: number; tax_percent?: number; notes?: string | null }) =>
+    post<Estimate>("/estimates", body),
+  updateEstimate: (id: string, body: Record<string, unknown>) => patch<Estimate>(`/estimates/${id}`, body),
+  deleteEstimate: (id: string) => del(`/estimates/${id}`),
+  sendEstimate: (id: string) => post<Estimate>(`/estimates/${id}/send`),
+  acceptEstimate: (id: string) => post<Estimate>(`/estimates/${id}/accept`),
+  declineEstimate: (id: string) => post<Estimate>(`/estimates/${id}/decline`),
+  addEstimateItem: (id: string, body: { description: string; group_name?: string; cost_code_id?: string | null; unit?: string | null; quantity?: number; unit_cost?: number; markup_percent?: number }) =>
+    post<Estimate>(`/estimates/${id}/items`, body),
+  updateEstimateItem: (itemId: string, body: Record<string, unknown>) => patch<Estimate>(`/estimate-items/${itemId}`, body),
+  deleteEstimateItem: (itemId: string) => del<Estimate>(`/estimate-items/${itemId}`),
+
+  // Client updates + per-job activity feed.
+  listClientUpdates: (jobId: string, publishedOnly = false) =>
+    get<ClientUpdate[]>(`/client-updates${qs({ job_id: jobId, published_only: publishedOnly || undefined })}`),
+  postClientUpdate: (body: { job_id: string; title: string; body: string; is_published?: boolean }) =>
+    post<ClientUpdate>("/client-updates", body),
+  editClientUpdate: (id: string, body: Record<string, unknown>) => patch<ClientUpdate>(`/client-updates/${id}`, body),
+  deleteClientUpdate: (id: string) => del(`/client-updates/${id}`),
+  activityFeed: (jobId: string, limit = 60) => get<ActivityEvent[]>(`/activity${qs({ job_id: jobId, limit })}`),
+
+  // Messaging — comments on records, and an internal message inbox.
+  listComments: (jobId: string, params: { entity_type?: string; entity_id?: string } = {}) =>
+    get<Comment[]>(`/comments${qs({ job_id: jobId, ...params })}`),
+  addComment: (body: { job_id: string; body: string; parent_id?: string | null; entity_type?: string | null; entity_id?: string | null }) =>
+    post<Comment>("/comments", body),
+  deleteComment: (id: string) => del(`/comments/${id}`),
+  inboxSummary: () => get<InboxSummary>("/messages/summary"),
+  inbox: () => get<ThreadSummary[]>("/messages/inbox"),
+  sentMessages: () => get<ThreadSummary[]>("/messages/sent"),
+  readThread: (threadId: string) => get<MessageItem[]>(`/messages/threads/${threadId}`),
+  sendMessage: (body: { subject: string; body: string; recipient_ids: string[]; job_id?: string | null }) =>
+    post<MessageItem>("/messages", body),
+  replyMessage: (threadId: string, body: string) =>
+    post<MessageItem>(`/messages/threads/${threadId}/reply`, { body }),
+
+  // Owner (client) invoicing — the receivables side.
+  ownerInvoiceSummary: (jobId?: string) =>
+    get<OwnerInvoiceSummary>(`/client-invoices/summary${qs({ job_id: jobId })}`),
+  listOwnerInvoices: (params: { job_id?: string; invoice_status?: string; page?: number; size?: number } = {}) =>
+    get<Page<OwnerInvoice>>(`/client-invoices${qs(params)}`),
+  getOwnerInvoice: (id: string) => get<OwnerInvoice>(`/client-invoices/${id}`),
+  createOwnerInvoice: (body: {
+    job_id: string;
+    title: string;
+    kind?: string;
+    issue_date?: string | null;
+    due_date?: string | null;
+    subtotal?: number;
+    tax_amount?: number;
+    retainage_amount?: number;
+    notes?: string | null;
+  }) => post<OwnerInvoice>("/client-invoices", body),
+  generatePaymentSchedule: (body: {
+    job_id: string;
+    contract_amount?: number | null;
+    deposit_percent?: number;
+    progress_count?: number;
+    final_percent?: number;
+    first_due?: string | null;
+    interval_days?: number;
+    retainage_percent?: number;
+  }) => post<OwnerInvoice[]>("/client-invoices/generate-schedule", body),
+  updateOwnerInvoice: (id: string, body: Record<string, unknown>) =>
+    patch<OwnerInvoice>(`/client-invoices/${id}`, body),
+  deleteOwnerInvoice: (id: string) => del(`/client-invoices/${id}`),
+  sendOwnerInvoice: (id: string) => post<OwnerInvoice>(`/client-invoices/${id}/send`),
+  voidOwnerInvoice: (id: string) => post<OwnerInvoice>(`/client-invoices/${id}/void`),
+  recordOwnerPayment: (
+    id: string,
+    body: { amount: number; paid_on?: string | null; method?: string; reference?: string | null },
+  ) => post<OwnerInvoice>(`/client-invoices/${id}/payments`, body),
+  addInvoiceLine: (id: string, body: { description: string; unit?: string | null; quantity?: number; unit_cost?: number; markup_percent?: number }) =>
+    post<OwnerInvoice>(`/client-invoices/${id}/lines`, body),
+  deleteInvoiceLine: (lineId: string) => del<OwnerInvoice>(`/client-invoices/lines/${lineId}`),
+
+  // Cost inbox — capture incoming costs before they become bills.
+  costInboxSummary: () => get<CostInboxSummary>("/cost-inbox/summary"),
+  listCostInbox: (params: { item_status?: string; job_id?: string; page?: number; size?: number } = {}) =>
+    get<Page<CostInboxItem>>(`/cost-inbox${qs(params)}`),
+  captureCost: (body: {
+    title: string;
+    amount?: number | null;
+    purchase_date?: string | null;
+    job_id?: string | null;
+    vendor_id?: string | null;
+    cost_code_id?: string | null;
+    notes?: string | null;
+  }) => post<CostInboxItem>("/cost-inbox", body),
+  codeCost: (id: string, body: Record<string, unknown>) => patch<CostInboxItem>(`/cost-inbox/${id}`, body),
+  pushCost: (id: string) => post<CostInboxItem>(`/cost-inbox/${id}/push`),
+  rejectCost: (id: string) => post<CostInboxItem>(`/cost-inbox/${id}/reject`),
+  reopenCost: (id: string) => post<CostInboxItem>(`/cost-inbox/${id}/reopen`),
+  deleteCost: (id: string) => del(`/cost-inbox/${id}`),
+
+  // Time clock — employee shifts, live board, locator map.
+  timeClockSummary: (jobId?: string) =>
+    get<TimeClockSummary>(`/shifts/summary${qs({ job_id: jobId })}`),
+  listShifts: (params: { job_id?: string; shift_status?: string; page?: number; size?: number } = {}) =>
+    get<Page<Shift>>(`/shifts${qs(params)}`),
+  onTheClock: (jobId?: string) => get<Shift[]>(`/shifts/active${qs({ job_id: jobId })}`),
+  shiftMap: (jobId?: string) => get<ShiftMapPoint[]>(`/shifts/map${qs({ job_id: jobId })}`),
+  clockIn: (body: {
+    job_id: string;
+    worker_name: string;
+    user_id?: string | null;
+    cost_code_id?: string | null;
+    shift_type?: string;
+    lat?: number | null;
+    lng?: number | null;
+    out_of_bounds?: string;
+    notes?: string | null;
+  }) => post<Shift>("/shifts/clock-in", body),
+  clockOut: (id: string, body: { lat?: number | null; lng?: number | null } = {}) =>
+    post<Shift>(`/shifts/${id}/clock-out`, body),
+  createShift: (body: {
+    job_id: string;
+    worker_name: string;
+    user_id?: string | null;
+    cost_code_id?: string | null;
+    shift_type?: string;
+    clock_in_at: string;
+    clock_out_at?: string | null;
+    notes?: string | null;
+  }) => post<Shift>("/shifts", body),
+  updateShift: (id: string, body: Record<string, unknown>) => patch<Shift>(`/shifts/${id}`, body),
+  deleteShift: (id: string) => del(`/shifts/${id}`),
+  approveShift: (id: string) => post<Shift>(`/shifts/${id}/approve`),
+  unapproveShift: (id: string) => post<Shift>(`/shifts/${id}/unapprove`),
+
   jobCost: (jobId: string) => get<JobCostSummary>(`/jobs/${jobId}/cost`),
 
   /* -------------------------------------------------------- change orders */
@@ -616,6 +883,9 @@ export const api = {
       responsible_party: string;
       price_delta: string;
       schedule_days: number;
+      approval_deadline?: string;
+      client_notes?: string;
+      internal_notes?: string;
       cost_lines: { cost_code_id: string; amount: string }[];
     },
   ) => post<ChangeOrder>(`/jobs/${jobId}/change-orders`, body),
@@ -1271,6 +1541,7 @@ export const api = {
       community_id?: string;
       plan_id?: string;
       vendor_id?: string;
+      lead_id?: string;
       category?: string;
       status?: string;
       critical_only?: boolean;
@@ -1482,6 +1753,17 @@ export const api = {
     location?: string;
     priority?: string;
   }) => post<WarrantyRequest>("/homeowner/warranty", body),
+  homeownerSelections: () => get<SelectionSignoff[]>("/homeowner/selections"),
+  homeownerApproveSelection: (id: string, body: { signature: string; comment?: string }) =>
+    post<SelectionSignoff>(`/homeowner/selections/${id}/approve`, body),
+  homeownerDeclineSelection: (
+    id: string,
+    body: { reason: string; signature?: string; comment?: string },
+  ) => post<SelectionSignoff>(`/homeowner/selections/${id}/decline`, body),
+  homeownerPickChoice: (choiceId: string) =>
+    post<SelectionSignoff>(`/homeowner/selections/choices/${choiceId}/select`, {}),
+  homeownerInvoices: () => get<BuyerInvoice[]>("/homeowner/invoices"),
+  homeownerUpdates: () => get<BuyerUpdate[]>("/homeowner/updates"),
 
   /* ------------------------------------------------- prequalification */
   /** The board: approved, would-be-refused, no record, missing cover, lapsing paperwork. */

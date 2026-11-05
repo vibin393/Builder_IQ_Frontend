@@ -20,7 +20,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { useConfirm } from "@/components/feedback";
 import { useToast } from "@/components/Toast";
@@ -79,6 +79,7 @@ export default function LeadDetailPage() {
   const communities = useAsync(() => api.listCommunities(), []);
   const realtors = useAsync(() => api.listRealtors(), []);
   const staff = useAsync(() => api.listUsers().then((p) => p.items), []);
+  const docs = useAsync(() => api.listDocuments({ lead_id: id }), [id]);
 
   const [editing, setEditing] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -327,6 +328,39 @@ export default function LeadDetailPage() {
         </div>
 
         <div className="space-y-6">
+          <Card title="Contact">
+            <dl className="space-y-3 text-sm">
+              <Detail label="Name" value={l.full_name} />
+              <Detail
+                label="Email"
+                value={
+                  l.email ? (
+                    <a href={`mailto:${l.email}`} className="hover:underline" style={{ color: "var(--brand)" }}>{l.email}</a>
+                  ) : "—"
+                }
+              />
+              <Detail
+                label="Phone"
+                value={
+                  l.phone ? (
+                    <a href={`tel:${l.phone}`} className="hover:underline" style={{ color: "var(--brand)" }}>{l.phone}</a>
+                  ) : "—"
+                }
+              />
+              <Detail
+                label="Mobile"
+                value={
+                  l.mobile ? (
+                    <a href={`tel:${l.mobile}`} className="hover:underline" style={{ color: "var(--brand)" }}>{l.mobile}</a>
+                  ) : "—"
+                }
+              />
+              <Detail label="Address" value={l.address ?? "—"} />
+              <Detail label="City" value={l.city ?? "—"} />
+              <Detail label="Postcode" value={l.postcode ?? "—"} />
+            </dl>
+          </Card>
+
           <Card title="What they want">
             <dl className="space-y-3 text-sm">
               <Detail
@@ -380,6 +414,53 @@ export default function LeadDetailPage() {
             </dl>
           </Card>
 
+          <Card title={`Documents${docs.data?.length ? ` (${docs.data.length})` : ""}`}>
+            {docs.loading ? (
+              <p className="text-sm" style={{ color: "var(--fg-subtle)" }}>Loading…</p>
+            ) : (docs.data ?? []).length === 0 ? (
+              <p className="text-sm" style={{ color: "var(--fg-subtle)" }}>No documents attached.</p>
+            ) : (
+              <ul className="space-y-2.5">
+                {(docs.data ?? []).map((d) => {
+                  const ext = (d.name.split(".").pop() || "").toLowerCase();
+                  const color =
+                    ext === "pdf" ? "#dc2626"
+                      : ["xls", "xlsx", "csv"].includes(ext) ? "#16a34a"
+                      : ["doc", "docx"].includes(ext) ? "#2563eb"
+                      : "var(--fg-muted)";
+                  const viewable = /^(\/|https?:)/.test(d.storage_key);
+                  return (
+                    <li key={d.id} className="flex items-center gap-2.5 text-sm">
+                      <svg
+                        width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke={color} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"
+                        style={{ flexShrink: 0 }} aria-hidden="true"
+                      >
+                        <path d="M9 3h6l4 4v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" />
+                        <path d="M15 3v4h4" />
+                        <path d="M9.5 13h5M9.5 16.5h3" />
+                      </svg>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-medium" title={d.name}>{d.name}</span>
+                        <span className="text-xs" style={{ color: "var(--fg-subtle)", textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                          {ext || titleCase(d.category)}
+                        </span>
+                      </span>
+                      {viewable && (
+                        <button
+                          className="btn btn-ghost btn-sm"
+                          onClick={() => window.open(encodeURI(d.storage_key), "_blank", "noopener")}
+                        >
+                          View
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </Card>
+
           <Card title="Working it">
             <dl className="space-y-3 text-sm">
               <Detail
@@ -417,7 +498,7 @@ export default function LeadDetailPage() {
   );
 }
 
-function Detail({ label, value }: { label: string; value: string }) {
+function Detail({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex justify-between gap-4">
       <dt style={{ color: "var(--fg-muted)" }}>{label}</dt>

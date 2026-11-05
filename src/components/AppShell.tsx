@@ -67,20 +67,29 @@ const NAV: NavGroup[] = [
     items: [
       { href: "/leads", label: "Leads", icon: "leads", badge: "openLeads",
         roles: ["owner", "admin", "executive", "sales"] },
+      { href: "/sales", label: "Sales desk", icon: "salesDesk",
+        roles: ["owner", "admin", "executive", "sales"] },
       { href: "/jobs", label: "Homes", icon: "homes" },
+      { href: "/map", label: "Map", icon: "map" },
       { href: "/appointments", label: "Design studio", icon: "design",
+        roles: ["owner", "admin", "executive", "sales"] },
+      { href: "/signoff", label: "Selection signoff", icon: "signoff" },
+      { href: "/proposals", label: "Lead proposals", icon: "proposals",
         roles: ["owner", "admin", "executive", "sales"] },
       { href: "/campaigns", label: "Campaigns", icon: "campaigns",
         roles: ["owner", "admin", "executive", "sales"] },
+      { href: "/labels", label: "Labels", icon: "labels" },
     ],
   },
   {
     heading: "Construction",
     items: [
-      { href: "/schedule", label: "Schedule", icon: "schedule" },
-      { href: "/field", label: "Field ops", icon: "field", badge: "overdueTasks" },
+      { href: "/schedule", label: "Schedule", icon: "schedule", badge: "overdueTasks" },
+      { href: "/field", label: "Field ops", icon: "field" },
+      { href: "/updates", label: "Activity & updates", icon: "updates" },
       { href: "/safety", label: "Safety & quality", icon: "safety", badge: "openObservations" },
       { href: "/labour", label: "Labour", icon: "labour" },
+      { href: "/time-clock", label: "Time clock", icon: "clock" },
       { href: "/warranty", label: "Warranty", icon: "warranty", badge: "openWarranty",
         roles: ["owner", "admin", "executive", "warranty", "superintendent"] },
       { href: "/surveys", label: "Surveys", icon: "surveys" },
@@ -89,20 +98,28 @@ const NAV: NavGroup[] = [
   {
     heading: "Project controls",
     items: [
+      { href: "/messages", label: "Messages", icon: "messages" },
+      { href: "/comments", label: "Comments", icon: "comments" },
       { href: "/rfis", label: "RFIs", icon: "rfis", badge: "openRFIs" },
       { href: "/submittals", label: "Submittals", icon: "submittals", badge: "awaitingSubmittals" },
       { href: "/drawings", label: "Drawings & specs", icon: "drawings" },
       { href: "/documents", label: "Documents", icon: "documents", badge: "docsExpiring" },
+      { href: "/photos", label: "Photos", icon: "photos" },
+      { href: "/videos", label: "Videos", icon: "videos" },
       { href: "/meetings", label: "Meetings", icon: "meetings", badge: "meetingActions" },
+      { href: "/notifications", label: "Notifications", icon: "notifications" },
     ],
   },
   {
     heading: "Purchasing",
     items: [
+      { href: "/estimates", label: "Estimates", icon: "estimates" },
       { href: "/bidding", label: "Bidding", icon: "bidding", badge: "overdueBids" },
       { href: "/compliance", label: "Trade compliance", icon: "compliance", badge: "expiringCompliance" },
       { href: "/purchase-orders", label: "Purchase orders", icon: "purchaseOrders", badge: "draftPOs" },
-      { href: "/invoices", label: "Invoices", icon: "invoices", badge: "awaitingInvoices" },
+      { href: "/invoices", label: "Bills", icon: "invoices", badge: "awaitingInvoices" },
+      { href: "/cost-inbox", label: "Cost inbox", icon: "costInbox" },
+      { href: "/client-invoices", label: "Client invoices", icon: "clientInvoices" },
       { href: "/accounting", label: "Accounting", icon: "accounting",
         roles: ["owner", "admin", "executive", "accounting"] },
     ],
@@ -114,7 +131,8 @@ const NAV: NavGroup[] = [
       { href: "/plans", label: "Plans", icon: "plans" },
       { href: "/options", label: "Option catalog", icon: "options" },
       { href: "/vendors", label: "Trades", icon: "vendors" },
-      { href: "/scorecard", label: "Trade scorecard", icon: "reports" },
+      { href: "/directory", label: "Directory", icon: "directory" },
+      { href: "/scorecard", label: "Trade scorecard", icon: "scorecard" },
       { href: "/cost-codes", label: "Cost codes", icon: "costCodes" },
       { href: "/land", label: "Land development", icon: "land" },
       { href: "/settings/users", label: "Users", icon: "users" },
@@ -123,7 +141,15 @@ const NAV: NavGroup[] = [
 ];
 
 const HOMEOWNER_NAV: NavGroup[] = [
-  { heading: "My home", items: [{ href: "/my-home", label: "Overview", icon: "myHome" }] },
+  {
+    heading: "My home",
+    items: [
+      { href: "/my-home", label: "Overview", icon: "myHome" },
+      { href: "/my-home/selections", label: "My selections", icon: "design" },
+      { href: "/my-home/invoices", label: "My invoices", icon: "invoices" },
+      { href: "/my-home/updates", label: "Updates", icon: "campaigns" },
+    ],
+  },
 ];
 
 /** External design team. They answer RFIs and review submittals against the
@@ -370,9 +396,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-label="Main navigation"
         >
           <div className="sidebar-head">
-            <Link href={homeHref} className="brand-link" title="Corman Leigh">
+            <Link href={homeHref} className="brand-link" title="Titan CR Inc">
               <Logo
-                size={32}
+                size={50}
                 showText
                 subtitle={
                   isTrade
@@ -524,7 +550,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <ol className="flex items-center gap-1.5 text-sm">
                 <li>
                   <Link href={homeHref} className="crumb-root">
-                    Corman Leigh
+                    Titan CR Inc
                   </Link>
                 </li>
                 {currentLabel && (

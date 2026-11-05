@@ -298,6 +298,8 @@ export interface Lot {
   lot_number: string;
   address: string | null;
   postcode: string | null;
+  latitude: string | null;
+  longitude: string | null;
   status: LotStatus;
   premium: string;
   phase_id: string | null;
@@ -649,6 +651,407 @@ export interface Selection {
   selected_date: string | null;
 }
 
+export type SelectionApprovalStatus = "not_submitted" | "awaiting" | "approved" | "declined";
+
+/** A selection with its customer-facing signoff state. */
+export interface SelectionChoice {
+  id: string;
+  selection_id: string;
+  description: string;
+  price: string;
+  option_id: string | null;
+  is_selected: boolean;
+  sort_order: number;
+  over_allowance: string | null;
+}
+
+export interface SelectionSignoff {
+  id: string;
+  job_id: string;
+  option_id: string;
+  option_name: string;
+  option_category: string | null;
+  status: SelectionStatus;
+  approval_status: SelectionApprovalStatus;
+  quantity: number;
+  price_at_selection: string;
+  extended_price: string;
+  allowance_amount: string | null;
+  requires_client_selection: boolean;
+  over_allowance: string | null;
+  selected_date: string | null;
+  approval_requested_at: string | null;
+  approval_deadline: string | null;
+  decided_at: string | null;
+  buyer_signature: string | null;
+  approved_by_buyer_id: string | null;
+  decline_reason: string | null;
+  buyer_comment: string | null;
+  is_awaiting_buyer: boolean;
+  approval_overdue: boolean;
+  choices: SelectionChoice[];
+}
+
+export interface SignoffSummary {
+  job_id: string | null;
+  total: number;
+  not_submitted: number;
+  awaiting: number;
+  approved: number;
+  declined: number;
+  overdue: number;
+}
+
+export type LeadProposalStatus = "draft" | "sent" | "accepted" | "declined" | "expired";
+
+export interface ProposalItem {
+  id: string;
+  proposal_id: string;
+  group_name: string;
+  description: string;
+  unit: string | null;
+  quantity: string;
+  unit_cost: string;
+  markup_percent: string;
+  sort_order: number;
+  unit_price: string;
+  extended_cost: string;
+  extended_price: string;
+}
+
+export interface ProposalTemplateItem {
+  id: string;
+  group_name: string;
+  description: string;
+  unit: string | null;
+  quantity: string;
+  unit_cost: string;
+  markup_percent: string;
+  sort_order: number;
+  unit_price: string;
+  extended_price: string;
+}
+
+export interface ProposalTemplate {
+  id: string;
+  name: string;
+  description: string | null;
+  total: string;
+  items: ProposalTemplateItem[];
+}
+
+export interface LeadProposal {
+  id: string;
+  lead_id: string;
+  lead_name: string;
+  title: string;
+  amount: string;
+  total: string;
+  status: LeadProposalStatus;
+  sent_on: string | null;
+  valid_until: string | null;
+  decided_on: string | null;
+  notes: string | null;
+  is_expired: boolean;
+  items: ProposalItem[];
+}
+
+export interface SalesCalendarEvent {
+  date: string;
+  kind: string;
+  ref_id: string | null;
+  title: string;
+  detail: string | null;
+}
+
+export interface LeadMapPoint {
+  id: string;
+  name: string;
+  lat: string;
+  lng: string;
+  status: string;
+  city: string | null;
+}
+
+export type EstimateStatus = "draft" | "sent" | "accepted" | "declined";
+
+export interface EstimateItem {
+  id: string;
+  estimate_id: string;
+  group_name: string;
+  description: string;
+  cost_code_id: string | null;
+  unit: string | null;
+  quantity: string;
+  unit_cost: string;
+  markup_percent: string;
+  sort_order: number;
+  unit_price: string;
+  extended_cost: string;
+  extended_price: string;
+}
+
+export interface Estimate {
+  id: string;
+  job_id: string;
+  title: string;
+  status: EstimateStatus;
+  default_markup_percent: string;
+  tax_percent: string;
+  issued_on: string | null;
+  notes: string | null;
+  total_cost: string;
+  subtotal: string;
+  tax_amount: string;
+  total_price: string;
+  margin: string;
+  items: EstimateItem[];
+}
+
+export interface EstimateListRow {
+  id: string;
+  job_id: string;
+  title: string;
+  status: EstimateStatus;
+  issued_on: string | null;
+  subtotal: string;
+  total_price: string;
+}
+
+export interface ClientUpdate {
+  id: string;
+  job_id: string;
+  title: string;
+  body: string;
+  posted_by_id: string | null;
+  posted_by_name: string;
+  is_published: boolean;
+  posted_on: string;
+}
+
+export interface ActivityEvent {
+  kind: string;
+  at: string;
+  actor: string;
+  title: string;
+  detail: string | null;
+}
+
+/** A threaded comment on a job or a record within it. */
+export interface Comment {
+  id: string;
+  job_id: string;
+  entity_type: string | null;
+  entity_id: string | null;
+  parent_id: string | null;
+  author_id: string | null;
+  author_name: string;
+  body: string;
+  created_at: string;
+}
+
+export interface MessageRecipientInfo {
+  user_id: string;
+  user_name: string;
+  read_at: string | null;
+}
+
+/** One internal message within a thread. */
+export interface MessageItem {
+  id: string;
+  thread_id: string;
+  subject: string;
+  body: string;
+  sender_id: string | null;
+  sender_name: string;
+  job_id: string | null;
+  created_at: string;
+  recipients: MessageRecipientInfo[];
+}
+
+export interface ThreadSummary {
+  thread_id: string;
+  subject: string;
+  snippet: string;
+  last_at: string;
+  last_sender: string;
+  message_count: number;
+  unread: number;
+  participants: string[];
+}
+
+export interface InboxSummary {
+  threads: number;
+  unread: number;
+}
+
+export type OwnerInvoiceKind = "deposit" | "progress" | "final" | "standard";
+export type OwnerInvoiceStatus = "draft" | "sent" | "viewed" | "partial" | "paid" | "void";
+
+export interface OwnerPayment {
+  id: string;
+  owner_invoice_id: string;
+  amount: string;
+  paid_on: string;
+  method: string;
+  reference: string | null;
+  notes: string | null;
+}
+
+export interface OwnerInvoiceLine {
+  id: string;
+  owner_invoice_id: string;
+  description: string;
+  unit: string | null;
+  quantity: string;
+  unit_cost: string;
+  markup_percent: string;
+  sort_order: number;
+  unit_price: string;
+  extended_cost: string;
+  extended_price: string;
+}
+
+/** An owner (client) invoice — the receivables side. */
+export interface OwnerInvoice {
+  id: string;
+  job_id: string;
+  invoice_number: string;
+  title: string;
+  kind: OwnerInvoiceKind;
+  status: OwnerInvoiceStatus;
+  issue_date: string | null;
+  due_date: string | null;
+  viewed_by_owner_on: string | null;
+  subtotal: string;
+  effective_subtotal: string;
+  tax_amount: string;
+  retainage_amount: string;
+  notes: string | null;
+  invoice_description: string | null;
+  closing_text: string | null;
+  payment_terms: string | null;
+  total_price: string;
+  amount_paid: string;
+  balance_due: string;
+  is_paid: boolean;
+  payments: OwnerPayment[];
+  lines: OwnerInvoiceLine[];
+}
+
+export interface OwnerInvoiceSummary {
+  job_id: string | null;
+  count: number;
+  draft: number;
+  outstanding_count: number;
+  overdue: number;
+  total_invoiced: string;
+  total_paid: string;
+  outstanding: string;
+}
+
+export type CostInboxStatus = "new" | "coded" | "pushed" | "rejected";
+
+/** A captured cost awaiting coding and push to a bill. */
+export interface CostInboxItem {
+  id: string;
+  title: string;
+  status: CostInboxStatus;
+  amount: string | null;
+  purchase_date: string | null;
+  job_id: string | null;
+  vendor_id: string | null;
+  cost_code_id: string | null;
+  document_id: string | null;
+  invoice_id: string | null;
+  tags: string[] | null;
+  notes: string | null;
+  is_coded: boolean;
+}
+
+export interface CostInboxSummary {
+  count: number;
+  new: number;
+  coded: number;
+  pushed: number;
+  rejected: number;
+  open_amount: string;
+}
+
+export type ShiftStatus = "active" | "completed" | "cancelled";
+export type ShiftType = "regular" | "overtime" | "break" | "pto";
+export type OutOfBoundsStatus = "unknown" | "in_bounds" | "out_of_bounds";
+
+/** An employee shift — the presence layer (clock-in/out + location). */
+export interface Shift {
+  id: string;
+  job_id: string;
+  user_id: string | null;
+  worker_name: string;
+  cost_code_id: string | null;
+  status: ShiftStatus;
+  shift_type: ShiftType;
+  clock_in_at: string;
+  clock_out_at: string | null;
+  clock_in_lat: string | null;
+  clock_in_lng: string | null;
+  clock_out_lat: string | null;
+  clock_out_lng: string | null;
+  out_of_bounds: OutOfBoundsStatus;
+  notes: string | null;
+  approved_at: string | null;
+  approved_by_id: string | null;
+  invoiced_to_client: boolean;
+  duration_minutes: number;
+  total_hours: string;
+  is_active: boolean;
+  is_approved: boolean;
+}
+
+/** One pin on the employee locator map. */
+export interface ShiftMapPoint {
+  id: string;
+  job_id: string;
+  worker_name: string;
+  status: ShiftStatus;
+  lat: string;
+  lng: string;
+  clock_in_at: string;
+  out_of_bounds: OutOfBoundsStatus;
+}
+
+export interface TimeClockSummary {
+  job_id: string | null;
+  on_the_clock: number;
+  workers_today: number;
+  hours_today: string;
+  pending_approval: number;
+  out_of_bounds: number;
+}
+
+export type DirectoryContactType = "team" | "trade" | "customer" | "realtor";
+
+/** One contact in the unified directory, whatever kind of person they are. */
+export interface DirectoryContact {
+  type: DirectoryContactType;
+  id: string;
+  name: string;
+  company: string | null;
+  email: string | null;
+  phone: string | null;
+  detail: string | null;
+  code: string | null;
+  status: string | null;
+}
+
+export interface DirectorySummary {
+  total: number;
+  team: number;
+  trades: number;
+  customers: number;
+  realtors: number;
+}
+
 export interface SelectionCascade {
   selection_id: string;
   price_delta: string;
@@ -855,6 +1258,10 @@ export interface ChangeOrder {
   cost_delta: string;
   margin_impact: string;
   schedule_days: number;
+  approval_deadline: string | null;
+  approval_overdue: boolean;
+  client_notes: string | null;
+  internal_notes: string | null;
   approved_date: string | null;
   cost_lines: PlanCostLine[];
 }
@@ -995,7 +1402,9 @@ export interface Lead {
   phone: string | null;
   mobile: string | null;
   preferred_contact: ContactMethod | null;
+  address: string | null;
   city: string | null;
+  postcode: string | null;
 
   status: LeadStatus;
   source: LeadSource;
@@ -1009,6 +1418,10 @@ export interface Lead {
   price_max: string | null;
   bedrooms_needed: number | null;
   desired_move_in: string | null;
+  project_type: string | null;
+  tags: string[] | null;
+  confidence: number | null;
+  projected_sales_date: string | null;
 
   is_prequalified: boolean;
   has_home_to_sell: boolean;
@@ -1020,6 +1433,8 @@ export interface Lead {
   converted_buyer_id: string | null;
   is_archived: boolean;
   notes: string | null;
+  latitude: string | null;
+  longitude: string | null;
 
   /** Derived server-side: still being worked, and the follow-up date has passed. */
   is_open: boolean;
@@ -1460,6 +1875,7 @@ export type DocumentCategory =
   | "permit"
   | "inspection"
   | "photo"
+  | "video"
   | "warranty"
   | "insurance"
   | "lien_waiver"
@@ -1484,6 +1900,7 @@ export interface DocumentRecord {
   community_id: string | null;
   plan_id: string | null;
   vendor_id: string | null;
+  lead_id: string | null;
   uploaded_by_id: string | null;
   notes: string | null;
   created_at: string;
@@ -2188,6 +2605,44 @@ export interface HomeownerHome {
     contract_total: string;
     open_warranty_claims: number;
   }[];
+}
+
+/** A client invoice as the buyer sees it: price, paid and balance only — never cost. */
+export interface BuyerInvoice {
+  id: string;
+  job_id: string;
+  invoice_number: string;
+  title: string;
+  kind: OwnerInvoiceKind;
+  status: OwnerInvoiceStatus;
+  issue_date: string | null;
+  due_date: string | null;
+  total_price: string;
+  tax_amount: string;
+  retainage_amount: string;
+  amount_paid: string;
+  balance_due: string;
+  is_paid: boolean;
+  payment_terms: string | null;
+  invoice_description: string | null;
+  closing_text: string | null;
+  lines: {
+    description: string;
+    unit: string | null;
+    quantity: string;
+    unit_price: string;
+    extended_price: string;
+  }[];
+  payments: { amount: string; paid_on: string; method: string; reference: string | null }[];
+}
+
+/** A published client update shown in the homeowner portal. */
+export interface BuyerUpdate {
+  id: string;
+  job_id: string;
+  title: string;
+  body: string;
+  posted_on: string;
 }
 
 /* ========================================================================== */

@@ -31,6 +31,7 @@ const CATEGORIES: DocumentCategory[] = [
   "permit",
   "inspection",
   "photo",
+  "video",
   "warranty",
   "insurance",
   "lien_waiver",

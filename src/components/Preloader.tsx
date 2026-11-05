@@ -83,7 +83,7 @@ export function Preloader({ label = "Loading" }: { label?: string }) {
       <div className="preloader-inner">
         <HouseBuilder />
         <div className="preloader-brand">
-          <Logo size={30} subtitle="BUILDER PLATFORM" />
+          <Logo size={56} subtitle="BUILDER PLATFORM" />
         </div>
         <div className="preloader-bar" aria-hidden>
           <span />

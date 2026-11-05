@@ -353,12 +353,24 @@ export function Modal({
   onClose: () => void;
   children: ReactNode;
 }) {
-  if (!open) return null;
-  return (
-    <div
-      className="overlay"
-      onClick={onClose}
-    >
+  // Rendered through a portal to <body>. Without this the overlay is a child of the
+  // app shell, whose transforms trap `position: fixed` — so the backdrop only covered
+  // the content area (starting after the sidebar) instead of the whole screen.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  // Close on Escape while open.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open || !mounted) return null;
+
+  return createPortal(
+    <div className="overlay" onClick={onClose}>
       <div
         className="card overlay-panel max-w-lg p-6"
         onClick={(e) => e.stopPropagation()}
@@ -373,7 +385,8 @@ export function Modal({
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -407,7 +420,9 @@ export function Tabs<T extends string>({
                 : {}
             }
           >
-            {t}
+            {/* Humanise the tab key for display (on_the_clock → On the clock),
+                without changing the value the page switches on. */}
+            {String(t).replace(/[_-]+/g, " ").replace(/^\w/, (c) => c.toUpperCase())}
             {n ? (
               <span
                 className="tnum ml-1.5 rounded-full px-1.5 py-0.5 text-[0.65rem] font-semibold"

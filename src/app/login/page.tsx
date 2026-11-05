@@ -83,7 +83,7 @@ export default function LoginPage() {
       <section className="auth-form-side">
         <div className="auth-form">
           <div className="auth-logo">
-            <Logo size={40} subtitle="Builder platform" />
+            <Logo size={66} subtitle="Builder platform" />
           </div>
 
           <div key={mode} className="auth-heading">
@@ -111,7 +111,7 @@ export default function LoginPage() {
                       value={form.company_name}
                       onChange={set("company_name")}
                       required
-                      placeholder="Corman Leigh Homes"
+                      placeholder="Titan CR Inc"
                     />
                   </Field>
                 </div>

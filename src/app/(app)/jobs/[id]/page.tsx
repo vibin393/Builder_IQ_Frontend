@@ -48,6 +48,12 @@ export default function JobDetailPage() {
   const cost = useAsync(() => api.jobCost(id), [id]);
   const communities = useAsync(() => api.listCommunities(), []);
   const plans = useAsync(() => api.listPlans(), []);
+  // The home's physical location lives on its plot; fetch the development's plots
+  // so the job header can show the street address rather than just the development.
+  const lots = useAsync(
+    () => (job.data?.community_id ? api.listLots(job.data.community_id) : Promise.resolve([])),
+    [job.data?.community_id],
+  );
 
   if (job.loading) return <Loading label="Loading home" />;
   if (job.error) return <ErrorNote message={job.error} />;
@@ -56,6 +62,9 @@ export default function JobDetailPage() {
   const j = job.data;
   const community = byId(communities.data).get(j.community_id);
   const plan = byId(plans.data).get(j.plan_id);
+  const lot = byId(lots.data).get(j.lot_id);
+  // The stored plot address already carries city/state/zip; fall back to the bare postcode.
+  const location = lot?.address || lot?.postcode || "";
 
   function refreshMoney() {
     contract.reload();
@@ -66,8 +75,8 @@ export default function JobDetailPage() {
   return (
     <>
       <PageHeader
-        title={`Home ${j.job_number}`}
-        subtitle={`${community?.name ?? "—"} · ${plan?.name ?? "—"}`}
+        title={j.elevation ? j.elevation : `Home ${j.job_number}`}
+        subtitle={[`Home ${j.job_number}`, location, community?.name, plan?.name].filter(Boolean).join(" · ")}
         action={<StatusBadge status={j.status} />}
       />
 
@@ -1037,8 +1046,14 @@ function ChangeOrders({ jobId, onChange }: { jobId: string; onChange: () => void
                 <td className="font-medium">{co.co_number}</td>
                 <td>
                   <div>{co.description}</div>
-                  <div className="mt-1">
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5">
                     <StatusBadge status={co.status} />
+                    {co.approval_deadline && (
+                      <Badge tone={co.approval_overdue ? "danger" : "neutral"}>
+                        {co.approval_overdue ? "Overdue " : "Due "}
+                        {day(co.approval_deadline)}
+                      </Badge>
+                    )}
                   </div>
                 </td>
                 <td>
@@ -1113,6 +1128,9 @@ function NewChangeOrder({
     responsible_party: "buyer",
     price_delta: "0",
     schedule_days: "0",
+    approval_deadline: "",
+    client_notes: "",
+    internal_notes: "",
     cost_code_id: "",
     amount: "0",
   });
@@ -1133,6 +1151,9 @@ function NewChangeOrder({
         responsible_party: form.responsible_party,
         price_delta: form.price_delta || "0",
         schedule_days: Number(form.schedule_days) || 0,
+        approval_deadline: form.approval_deadline || undefined,
+        client_notes: form.client_notes || undefined,
+        internal_notes: form.internal_notes || undefined,
         cost_lines: form.cost_code_id ? [{ cost_code_id: form.cost_code_id, amount: form.amount }] : [],
       });
       onDone();
@@ -1162,14 +1183,23 @@ function NewChangeOrder({
             <option value="trade">Trade (backcharge)</option>
           </select>
         </Field>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Price change">
             <input className="input" value={form.price_delta} onChange={set("price_delta")} />
           </Field>
           <Field label="Schedule days">
             <input className="input" value={form.schedule_days} onChange={set("schedule_days")} />
           </Field>
+          <Field label="Client to respond by" hint="Optional deadline for the client's decision.">
+            <input className="input" type="date" value={form.approval_deadline} onChange={set("approval_deadline")} />
+          </Field>
         </div>
+        <Field label="Client notes" hint="Shown to the client on their copy.">
+          <input className="input" value={form.client_notes} onChange={set("client_notes")} />
+        </Field>
+        <Field label="Internal notes" hint="For your team only — never shown to the client.">
+          <input className="input" value={form.internal_notes} onChange={set("internal_notes")} />
+        </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Cost code">
             <select className="input" value={form.cost_code_id} onChange={set("cost_code_id")}>

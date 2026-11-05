@@ -4,9 +4,13 @@ node_modules/
 
 # Next.js build output
 .next/
+.next-demo/
 out/
 build/
 *.tsbuildinfo
+
+# Local demo/build artifacts and binary client data (not source — excluded from SonarQube push)
+public/lead-docs/
 
 # Environment (never commit real env; the .example is kept)
 .env
