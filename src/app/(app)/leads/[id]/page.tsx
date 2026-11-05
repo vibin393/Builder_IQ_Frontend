@@ -587,7 +587,7 @@ function LogTouch({ leadId, open, onDone }: { leadId: string; open: boolean; onD
           />
         </Field>
         <div className="flex justify-end">
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Log it"}
           </button>
         </div>
@@ -893,7 +893,7 @@ function EditLead({
                 type="checkbox"
                 checked={form.is_prequalified}
                 onChange={set("is_prequalified")}
-              />
+              />{" "}
               Prequalified
             </label>
             <label className="flex items-center gap-2">
@@ -901,7 +901,7 @@ function EditLead({
                 type="checkbox"
                 checked={form.has_home_to_sell}
                 onChange={set("has_home_to_sell")}
-              />
+              />{" "}
               Has a home to sell
             </label>
           </div>

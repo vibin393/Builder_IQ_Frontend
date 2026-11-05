@@ -160,7 +160,7 @@ function PinList({ points }: { points: ShiftMapPoint[] }) {
           <div className="flex items-center justify-between">
             <span className="font-medium">{p.worker_name}</span>
             {p.out_of_bounds !== "unknown" && (
-              <Badge tone={oobTone(p.out_of_bounds)}>{p.out_of_bounds.replace(/_/g, " ")}</Badge>
+              <Badge tone={oobTone(p.out_of_bounds)}>{p.out_of_bounds.replaceAll("_", " ")}</Badge>
             )}
           </div>
           <p className="mt-1 text-xs" style={{ color: "var(--fg-subtle)" }}>
@@ -373,7 +373,7 @@ export default function TimeClockPage() {
                   <td>
                     {sh.clock_in_lat ? (
                       <Badge tone={oobTone(sh.out_of_bounds)}>
-                        {sh.out_of_bounds === "unknown" ? "located" : sh.out_of_bounds.replace(/_/g, " ")}
+                        {sh.out_of_bounds === "unknown" ? "located" : sh.out_of_bounds.replaceAll("_", " ")}
                       </Badge>
                     ) : (
                       <span className="text-xs" style={{ color: "var(--fg-subtle)" }}>no location</span>
@@ -474,7 +474,7 @@ export default function TimeClockPage() {
       <Modal open={clockOpen} title="Clock in" onClose={() => setClockOpen(false)}>
         <div className="space-y-3">
           <Field label="Worker">
-            <input className="input" value={worker} onChange={(e) => setWorker(e.target.value)} placeholder="Full name" autoFocus />
+            <input className="input" value={worker} onChange={(e) => setWorker(e.target.value)} placeholder="Full name" />
           </Field>
           <Field label="Shift type">
             <select className="input" value={shiftType} onChange={(e) => setShiftType(e.target.value)}>

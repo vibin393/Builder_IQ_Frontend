@@ -282,7 +282,7 @@ export default function ClientInvoicesPage() {
       {/* create modal */}
       <Modal open={createOpen} title="New client invoice" onClose={() => setCreateOpen(false)}>
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Progress Payment #1" autoFocus /></Field>
+          <Field label="Title"><input className="input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Progress Payment #1" /></Field>
           <Field label="Kind">
             <select className="input" value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value })}>
               <option value="deposit">Deposit</option><option value="progress">Progress</option><option value="final">Final</option><option value="standard">Standard</option>
@@ -309,7 +309,7 @@ export default function ClientInvoicesPage() {
           </p>
         )}
         <div className="space-y-3">
-          <Field label="Amount"><input className="input" type="number" value={pay.amount} onChange={(e) => setPay({ ...pay, amount: e.target.value })} autoFocus /></Field>
+          <Field label="Amount"><input className="input" type="number" value={pay.amount} onChange={(e) => setPay({ ...pay, amount: e.target.value })} /></Field>
           <Field label="Method">
             <select className="input" value={pay.method} onChange={(e) => setPay({ ...pay, method: e.target.value })}>
               <option value="check">Check</option><option value="card">Card</option><option value="ach">ACH</option><option value="cash">Cash</option><option value="other">Other</option>

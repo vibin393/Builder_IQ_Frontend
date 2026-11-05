@@ -237,12 +237,16 @@ export function GuideModeLayer() {
       )}
 
       {card && (
-        <div className="guide-overlay" onClick={close} role="presentation" data-guide-ignore>
+        <div
+          className="guide-overlay"
+          onClick={(e) => { if (e.target === e.currentTarget) close(); }}
+          role="presentation"
+          data-guide-ignore
+        >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="guide-card-title"
-            onClick={(e) => e.stopPropagation()}
             className="guide-card"
           >
             {card.kind === "screen" ? (

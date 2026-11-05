@@ -11,7 +11,7 @@ import { useState } from "react";
  */
 
 const LOGO_SRC = "/brand/196x196.png";
-const LOGO_RATIO = 196 / 196; // square artwork
+const LOGO_RATIO = 1; // square artwork (196×196)
 
 export type LogoTone = "auto" | "chip" | "bare";
 

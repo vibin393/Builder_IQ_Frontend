@@ -567,7 +567,7 @@ function ReviewModal({
         <Field label="Outcome">
           <div className="space-y-2">
             {OUTCOMES.map((o, i) => (
-              <label key={o.value} className="flex items-start gap-2.5 text-sm">
+              <label key={o.value} aria-label={o.label} className="flex items-start gap-2.5 text-sm">
                 <input type="radio" name="status" value={o.value} defaultChecked={i === 0} className="mt-1" />
                 <span>
                   <span className="font-medium">{o.label}</span>

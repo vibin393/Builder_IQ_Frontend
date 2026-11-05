@@ -136,7 +136,7 @@ export default function PurchaseOrdersPage() {
           ))}
         </select>
         <label className="flex items-center gap-1.5 text-sm">
-          <input type="checkbox" checked={overdueOnly} onChange={(e) => setOverdueOnly(e.target.checked)} />
+          <input type="checkbox" checked={overdueOnly} onChange={(e) => setOverdueOnly(e.target.checked)} />{" "}
           Late only
         </label>
       </div>

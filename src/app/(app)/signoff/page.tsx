@@ -445,7 +445,6 @@ export default function SignoffPage() {
               value={signature}
               onChange={(e) => setSignature(e.target.value)}
               placeholder="e.g. Elva Alcaron"
-              autoFocus
             />
           </Field>
         ) : (
@@ -456,7 +455,6 @@ export default function SignoffPage() {
                 rows={3}
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                autoFocus
               />
             </Field>
             <div className="mt-3">
@@ -485,7 +483,7 @@ export default function SignoffPage() {
             Cancel
           </button>
           <button
-            className={decision?.kind === "approve" ? "btn btn-primary" : "btn btn-primary"}
+            className="btn btn-primary"
             disabled={busy}
             onClick={submitDecision}
           >
@@ -508,7 +506,7 @@ export default function SignoffPage() {
                   <input className="input" type="number" value={allowanceInput} onChange={(e) => setAllowanceInput(e.target.value)} />
                 </Field>
                 <label className="flex items-center gap-2 pb-2 text-sm">
-                  <input type="checkbox" checked={requiresInput} onChange={(e) => setRequiresInput(e.target.checked)} />
+                  <input type="checkbox" checked={requiresInput} onChange={(e) => setRequiresInput(e.target.checked)} />{" "}
                   Require client to pick
                 </label>
               </div>

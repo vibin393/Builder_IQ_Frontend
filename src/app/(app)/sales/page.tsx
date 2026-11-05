@@ -253,7 +253,7 @@ export default function SalesPage() {
                   <div className="space-y-2">
                     {events.map((e, i) => (
                       <div key={i} className="flex items-center gap-2 rounded-lg px-3 py-2" style={{ background: "var(--neutral-soft)" }}>
-                        <Badge tone={KIND_TONE[e.kind] ?? "neutral"}>{e.kind.replace(/_/g, " ")}</Badge>
+                        <Badge tone={KIND_TONE[e.kind] ?? "neutral"}>{e.kind.replaceAll("_", " ")}</Badge>
                         <span className="text-sm font-medium">{e.title}</span>
                         {e.detail && <span className="text-xs" style={{ color: "var(--fg-subtle)" }}>· {e.detail}</span>}
                       </div>
@@ -312,7 +312,7 @@ export default function SalesPage() {
                 <select
                   className="input w-auto max-w-[16rem]"
                   value=""
-                  onChange={(e) => { if (e.target.value) applyTemplate(e.target.value); e.target.value = ""; }}
+                  onChange={(e) => { if (e.target.value) void applyTemplate(e.target.value); e.target.value = ""; }}
                   aria-label="Apply a template"
                 >
                   <option value="">Apply a template…</option>

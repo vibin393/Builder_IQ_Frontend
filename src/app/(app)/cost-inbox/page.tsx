@@ -174,7 +174,7 @@ export default function CostInboxPage() {
       {/* capture modal */}
       <Modal open={captureOpen} title="Capture a cost" onClose={() => setCaptureOpen(false)}>
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={cap.title} onChange={(e) => setCap({ ...cap, title: e.target.value })} placeholder="e.g. Home Depot receipt" autoFocus /></Field>
+          <Field label="Title"><input className="input" value={cap.title} onChange={(e) => setCap({ ...cap, title: e.target.value })} placeholder="e.g. Home Depot receipt" /></Field>
           <div className="grid grid-cols-2 gap-2">
             <Field label="Amount"><input className="input" type="number" value={cap.amount} onChange={(e) => setCap({ ...cap, amount: e.target.value })} /></Field>
             <Field label="Purchase date"><input className="input" type="date" value={cap.purchase_date} onChange={(e) => setCap({ ...cap, purchase_date: e.target.value })} /></Field>

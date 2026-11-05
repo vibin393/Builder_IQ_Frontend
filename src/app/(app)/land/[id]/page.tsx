@@ -352,7 +352,7 @@ function ObligationDialog({
             <input className="input" inputMode="decimal" value={f.amount} onChange={(e) => setF({ ...f, amount: e.target.value })} />
           </Field>
           <label className="mt-6 flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={f.pre_commencement} onChange={(e) => setF({ ...f, pre_commencement: e.target.checked })} />
+            <input type="checkbox" checked={f.pre_commencement} onChange={(e) => setF({ ...f, pre_commencement: e.target.checked })} />{" "}
             Pre-commencement — blocks the start of works
           </label>
         </div>

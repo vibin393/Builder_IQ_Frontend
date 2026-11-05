@@ -496,7 +496,6 @@ function DecisionModal({
         <Field label={copy.label} hint={copy.hint}>
           <input
             className="input"
-            autoFocus
             value={text}
             onChange={(e) => setText(e.target.value)}
             required={copy.required}
@@ -652,7 +651,7 @@ function NewInvoice({
           />
         </Field>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={waiver} onChange={(e) => setWaiver(e.target.checked)} />
+          <input type="checkbox" checked={waiver} onChange={(e) => setWaiver(e.target.checked)} />{" "}
           Lien waiver received with the invoice
           <span style={{ color: "var(--fg-subtle)" }}>(can be recorded later)</span>
         </label>

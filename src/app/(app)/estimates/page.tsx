@@ -203,7 +203,7 @@ export default function EstimatesPage() {
 
       <Modal open={createOpen} title="New estimate" onClose={() => setCreateOpen(false)}>
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} autoFocus /></Field>
+          <Field label="Title"><input className="input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></Field>
           <div className="grid grid-cols-2 gap-2">
             <Field label="Default markup %"><input className="input" type="number" value={form.default_markup_percent} onChange={(e) => setForm({ ...form, default_markup_percent: e.target.value })} /></Field>
             <Field label="Tax %"><input className="input" type="number" value={form.tax_percent} onChange={(e) => setForm({ ...form, tax_percent: e.target.value })} /></Field>

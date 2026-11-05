@@ -442,7 +442,7 @@ function CompleteModal({
           <input type="number" min="0" step="0.01" className="input" value={cost} onChange={(e) => setCost(e.target.value)} />
         </Field>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={backCharge} onChange={(e) => setBackCharge(e.target.checked)} />
+          <input type="checkbox" checked={backCharge} onChange={(e) => setBackCharge(e.target.checked)} />{" "}
           Charge this back to the trade (their defect)
         </label>
         {error && <ErrorNote message={error} />}
@@ -683,7 +683,7 @@ function ActivityLog({ r, onChange }: { r: WarrantyRequest; onChange: () => void
             <option value="internal">Internal only</option>
             <option value="homeowner">Visible to homeowner</option>
           </select>
-          <button className="btn btn-primary btn-sm" disabled={busy || !body.trim()}>
+          <button type="submit" className="btn btn-primary btn-sm" disabled={busy || !body.trim()}>
             {busy ? "Adding…" : "Add note"}
           </button>
         </div>

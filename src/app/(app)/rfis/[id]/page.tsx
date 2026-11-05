@@ -291,7 +291,7 @@ function EditRFI({
           </select>
         </Field>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="is_blocking" defaultChecked={r.is_blocking} />
+          <input type="checkbox" name="is_blocking" defaultChecked={r.is_blocking} />{" "}
           Work is stopped until this is answered
         </label>
         {error && <ErrorNote message={error} />}
@@ -399,14 +399,14 @@ function Thread({ r, onChange }: { r: RFI; onChange: () => void }) {
               </select>
             </Field>
             <label className="flex items-end gap-2 pb-2 text-sm">
-              <input type="checkbox" checked={official} onChange={(e) => setOfficial(e.target.checked)} />
+              <input type="checkbox" checked={official} onChange={(e) => setOfficial(e.target.checked)} />{" "}
               This is the official answer
             </label>
           </div>
           {official && (
             <div className="grid gap-3 sm:grid-cols-2 rounded-lg px-3 py-2" style={{ background: "var(--surface-2)" }}>
               <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={costImpact} onChange={(e) => setCostImpact(e.target.checked)} />
+                <input type="checkbox" checked={costImpact} onChange={(e) => setCostImpact(e.target.checked)} />{" "}
                 Has a cost impact
               </label>
               <Field label="Schedule impact (days)">
@@ -422,7 +422,7 @@ function Thread({ r, onChange }: { r: RFI; onChange: () => void }) {
           )}
           {error && <ErrorNote message={error} />}
           <div className="flex justify-end">
-            <button className="btn btn-primary btn-sm" disabled={busy || !body.trim()}>
+            <button type="submit" className="btn btn-primary btn-sm" disabled={busy || !body.trim()}>
               {busy ? "Adding…" : official ? "Record official answer" : "Add response"}
             </button>
           </div>
@@ -642,7 +642,7 @@ function AnswerModal({
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="cost_impact" />
+            <input type="checkbox" name="cost_impact" />{" "}
             This answer has a cost impact
           </label>
           <Field label="Schedule impact (days)">

@@ -818,7 +818,7 @@ function ReasonDialog({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Recorded", () => onSubmit(reason));
+          void run("Recorded", () => onSubmit(reason));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -839,7 +839,7 @@ function ReasonDialog({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Back
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : label}
           </button>
         </div>
@@ -867,7 +867,7 @@ function MoveTask({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Dates moved", () =>
+          void run("Dates moved", () =>
             api.rescheduleTask(task.id, { scheduled_start: when, cascade }),
           );
         }}
@@ -900,7 +900,7 @@ function MoveTask({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Moving…" : "Move it"}
           </button>
         </div>
@@ -920,7 +920,7 @@ function NewTemplate({ onClose, onDone }: { onClose: () => void; onDone: () => v
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(`${name} created`, () => api.createScheduleTemplate({ code, name }));
+          void run(`${name} created`, () => api.createScheduleTemplate({ code, name }));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -940,7 +940,7 @@ function NewTemplate({ onClose, onDone }: { onClose: () => void; onDone: () => v
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Creating…" : "Create"}
           </button>
         </div>
@@ -986,7 +986,7 @@ function NewTemplateTask({
             vendor_id: vendorId || undefined,
             is_milestone: milestone,
           };
-          run(editing ? `${name} updated` : `${name} added`, () =>
+          void run(editing ? `${name} updated` : `${name} added`, () =>
             editing
               ? api.updateTemplateTask(task!.id, body as never)
               : api.addTemplateTask(template.id, body),
@@ -1015,7 +1015,7 @@ function NewTemplateTask({
           </select>
         </Field>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={milestone} onChange={(e) => setMilestone(e.target.checked)} />
+          <input type="checkbox" checked={milestone} onChange={(e) => setMilestone(e.target.checked)} />{" "}
           A milestone
         </label>
         {!editing && (
@@ -1029,7 +1029,7 @@ function NewTemplateTask({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : editing ? "Save" : "Add"}
           </button>
         </div>
@@ -1057,7 +1057,7 @@ function DuplicateTemplate({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Template copied", () => api.duplicateTemplate(template.id, { code, name }));
+          void run("Template copied", () => api.duplicateTemplate(template.id, { code, name }));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1077,7 +1077,7 @@ function DuplicateTemplate({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Copying…" : "Duplicate"}
           </button>
         </div>
@@ -1097,7 +1097,7 @@ function NewHoliday({ onClose, onDone }: { onClose: () => void; onDone: () => vo
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(`${name} added`, () => api.addHoliday({ on_date: when, name }));
+          void run(`${name} added`, () => api.addHoliday({ on_date: when, name }));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1123,7 +1123,7 @@ function NewHoliday({ onClose, onDone }: { onClose: () => void; onDone: () => vo
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Adding…" : "Add"}
           </button>
         </div>

@@ -132,7 +132,7 @@ export default function VendorsPage() {
           ))}
         </select>
         <label className="flex items-center gap-1.5 text-sm">
-          <input type="checkbox" checked={archived} onChange={(e) => setArchived(e.target.checked)} />
+          <input type="checkbox" checked={archived} onChange={(e) => setArchived(e.target.checked)} />{" "}
           Include archived
         </label>
       </div>

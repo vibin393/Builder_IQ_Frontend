@@ -534,7 +534,7 @@ function FollowUp({
           </select>
         </Field>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={done} onChange={(e) => setDone(e.target.checked)} />
+          <input type="checkbox" checked={done} onChange={(e) => setDone(e.target.checked)} />{" "}
           Mark the follow-up as done
         </label>
         {error && <ErrorNote message={error} />}

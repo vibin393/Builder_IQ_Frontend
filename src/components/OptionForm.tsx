@@ -79,8 +79,8 @@ export function OptionForm({
       let saved: OptionDetail;
       if (editing) {
         saved = await api.updateOption(option!.id, body);
-        const before = [...(option!.plan_ids ?? [])].sort().join();
-        if ([...planIds].sort().join() !== before) saved = await api.setOptionPlans(option!.id, planIds);
+        const before = [...(option!.plan_ids ?? [])].sort((a, b) => a.localeCompare(b)).join();
+        if ([...planIds].sort((a, b) => a.localeCompare(b)).join() !== before) saved = await api.setOptionPlans(option!.id, planIds);
       } else {
         saved = await api.createOption({ ...(body as OptionInput & { code: string; name: string }), plan_ids: planIds });
       }
@@ -142,7 +142,7 @@ export function OptionForm({
               type="checkbox"
               checked={f.is_structural}
               onChange={(e) => setF((prev) => ({ ...prev, is_structural: e.target.checked }))}
-            />
+            />{" "}
             Structural — refused after a home&apos;s structural cut-off
           </label>
         </div>

@@ -27,7 +27,7 @@ function stamp(): string {
 function csvCell(value: Cell): string {
   if (value === null || value === undefined) return "";
   const text = String(value);
-  return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  return /[",\n\r]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
 export function downloadCsv(name: string, headers: string[], rows: Cell[][]): void {
@@ -56,7 +56,7 @@ export function downloadExcel(
   rows: Cell[][],
 ): void {
   const esc = (v: Cell) =>
-    String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    String(v ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
   const html = `<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head>
 <meta charset="utf-8" />

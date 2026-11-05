@@ -520,7 +520,7 @@ export default function DrawingsPage() {
               type="checkbox"
               checked={overdueOnly}
               onChange={(e) => setOverdueOnly(e.target.checked)}
-            />
+            />{" "}
             Overdue only
           </label>
           {transmittals.loading ? (
@@ -819,7 +819,7 @@ export default function DrawingsPage() {
             <textarea name="body" className="input" rows={5} />
           </Field>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="issue_now" defaultChecked />
+            <input type="checkbox" name="issue_now" defaultChecked />{" "}
             Issue now (otherwise saved as a draft)
           </label>
           <div className="flex justify-end gap-2">

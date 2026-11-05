@@ -210,7 +210,7 @@ function QueueTab({
           ))}
         </div>
         <label className="flex items-center gap-2 text-sm">
-          Through
+          Through{" "}
           <input
             type="date"
             className="input"
@@ -595,7 +595,6 @@ function BatchDecision({
         >
           <input
             className="input"
-            autoFocus
             value={text}
             onChange={(e) => setText(e.target.value)}
             required={!posting}

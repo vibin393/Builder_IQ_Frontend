@@ -528,7 +528,7 @@ function CampaignForm({
             ends_on: form.ends_on || undefined,
             notes: form.notes || undefined,
           };
-          run(editing ? `${form.name} updated` : `${form.name} created`, () =>
+          void run(editing ? `${form.name} updated` : `${form.name} created`, () =>
             editing
               ? api.updateCampaign(campaign!.id, body as never)
               : api.createCampaign({ ...body, cost: form.cost || undefined }),
@@ -601,7 +601,7 @@ function CampaignForm({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : editing ? "Save changes" : "Create"}
           </button>
         </div>
@@ -644,15 +644,15 @@ function SmallDialog({
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (kind === "schedule") {
-      run(`${campaign.name} scheduled`, () => api.scheduleCampaign(campaign.id, when));
+      void run(`${campaign.name} scheduled`, () => api.scheduleCampaign(campaign.id, when));
     } else if (kind === "cost") {
-      run("Cost recorded", () => api.recordCampaignCost(campaign.id, cost));
+      void run("Cost recorded", () => api.recordCampaignCost(campaign.id, cost));
     } else if (kind === "cancel") {
-      run(`${campaign.name} cancelled`, () => api.cancelCampaign(campaign.id, reason));
+      void run(`${campaign.name} cancelled`, () => api.cancelCampaign(campaign.id, reason));
     } else if (kind === "duplicate") {
-      run("Copy created as a draft", () => api.duplicateCampaign(campaign.id, code));
+      void run("Copy created as a draft", () => api.duplicateCampaign(campaign.id, code));
     } else {
-      run("Delivery recorded", () =>
+      void run("Delivery recorded", () =>
         api.recordDelivery(campaign.id, {
           sent_count: Number(counts.sent_count) || 0,
           opened_count: Number(counts.opened_count) || 0,
@@ -762,7 +762,7 @@ function SmallDialog({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             {kind === "cancel" ? "Keep it" : "Cancel"}
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Save"}
           </button>
         </div>

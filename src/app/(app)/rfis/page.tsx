@@ -232,7 +232,7 @@ export default function RFIsPage() {
                 type="checkbox"
                 checked={overdueOnly}
                 onChange={(e) => setOverdueOnly(e.target.checked)}
-              />
+              />{" "}
               Overdue only
             </label>
           </div>
@@ -412,7 +412,7 @@ export default function RFIsPage() {
             </Field>
           </div>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="is_blocking" />
+            <input type="checkbox" name="is_blocking" />{" "}
             Work is stopped until this is answered
           </label>
           <p className="text-xs" style={{ color: "var(--fg-subtle)" }}>

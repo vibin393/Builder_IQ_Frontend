@@ -2247,11 +2247,11 @@ html.guide-mode main th:hover {
   0%,
   100% {
     opacity: 1;
-    r: 3;
+    r: 3px;
   }
   50% {
     opacity: 0.5;
-    r: 4;
+    r: 4px;
   }
 }
 

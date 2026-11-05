@@ -102,7 +102,7 @@ export function ProfileButton({
         <Avatar user={user} size={29} />
         <span className="foot-text">
           <span className="foot-name">{user.full_name}</span>
-          <span className="foot-role">{user.job_title || user.role.replace(/_/g, " ")}</span>
+          <span className="foot-role">{user.job_title || user.role.replaceAll("_", " ")}</span>
         </span>
         <span className="profile-caret">
           <Icons.chevron size={13} />
@@ -309,7 +309,7 @@ function EditProfile({
               hidden
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) pickFile(f);
+                if (f) void pickFile(f);
                 e.target.value = "";
               }}
             />

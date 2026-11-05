@@ -299,7 +299,7 @@ function refreshTokens(): Promise<boolean> {
       return false;
     }
   })();
-  refreshInFlight.finally(() => {
+  void refreshInFlight.finally(() => {
     refreshInFlight = null;
   });
   return refreshInFlight;

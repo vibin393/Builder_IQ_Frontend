@@ -373,7 +373,7 @@ export default function IntakeSourcesPage() {
               onClick={() => {
                 const e = inspecting;
                 setInspecting(null);
-                act("Payload replayed", () => api.replayIntakeEvent(e.id));
+                void act("Payload replayed", () => api.replayIntakeEvent(e.id));
               }}
             >
               Replay
@@ -450,8 +450,8 @@ function KeyIssued({ created, onClose }: { created: IntakeSourceCreated; onClose
   }'`}
         </pre>
         <p className="mt-2 text-xs" style={{ color: "var(--fg-subtle)" }}>
-          Field names are matched loosely — <code>name</code> or <code>first_name</code>/
-          <code>last_name</code>, <code>phone</code> or <code>telephone</code>, and so on. Send what
+          Field names are matched loosely — <code>name</code> or <code>first_name</code>/<code>last_name</code>,{" "}
+          <code>phone</code> or <code>telephone</code>, and so on. Send what
           your form already collects and check the channel afterwards; anything unrecognised lands in
           the queue above with the payload intact.
         </p>
@@ -501,7 +501,7 @@ function AddChannel({
     setForm((f) => ({
       ...f,
       kind,
-      code: kind === "web_form" ? "website" : kind.replace(/_/g, "-"),
+      code: kind === "web_form" ? "website" : kind.replaceAll("_", "-"),
       name: preset.label,
       lead_source: kind === "web_form" ? "website" : portal ? "portal" : "social",
       // Only a form a human fills in can have a honeypot. A webhook has no form.
@@ -648,7 +648,7 @@ function AddChannel({
                 type="checkbox"
                 checked={form.auto_assign}
                 onChange={(e) => setForm({ ...form, auto_assign: e.target.checked })}
-              />
+              />{" "}
               Share out between sales staff in turn
             </label>
           </Field>

@@ -711,7 +711,7 @@ function StartBuild({ job, onClose, onDone }: { job: Job; onClose: () => void; o
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(`${job.job_number} is on site`, () =>
+          void run(`${job.job_number} is on site`, () =>
             api.startBuild(job.id, {
               start_date: start || undefined,
               projected_completion: due || undefined,
@@ -758,7 +758,7 @@ function StartBuild({ job, onClose, onDone }: { job: Job; onClose: () => void; o
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy || (unsold && !allowUnsold)}>
+          <button type="submit" className="btn btn-primary" disabled={busy || (unsold && !allowUnsold)}>
             {busy ? "Starting…" : "Start the build"}
           </button>
         </div>
@@ -778,7 +778,7 @@ function HoldBuild({ job, onClose, onDone }: { job: Job; onClose: () => void; on
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(`${job.job_number} on hold`, () =>
+          void run(`${job.job_number} on hold`, () =>
             api.holdBuild(job.id, { reason, note: note || undefined }),
           );
         }}
@@ -807,7 +807,7 @@ function HoldBuild({ job, onClose, onDone }: { job: Job; onClose: () => void; on
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Put on hold"}
           </button>
         </div>
@@ -826,7 +826,7 @@ function CompleteBuild({ job, onClose, onDone }: { job: Job; onClose: () => void
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(`${job.job_number} complete`, () => api.completeBuild(job.id, { completed_on: when }));
+          void run(`${job.job_number} complete`, () => api.completeBuild(job.id, { completed_on: when }));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -846,7 +846,7 @@ function CompleteBuild({ job, onClose, onDone }: { job: Job; onClose: () => void
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Mark complete"}
           </button>
         </div>
@@ -866,7 +866,7 @@ function CloseHome({ job, onClose, onDone }: { job: Job; onClose: () => void; on
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(`${job.job_number} handed over`, () =>
+          void run(`${job.job_number} handed over`, () =>
             api.closeJob(job.id, { closing_date: when, warranty_months: Number(months) || 24 }),
           );
         }}
@@ -888,7 +888,7 @@ function CloseHome({ job, onClose, onDone }: { job: Job; onClose: () => void; on
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Closing…" : "Hand over"}
           </button>
         </div>
@@ -908,7 +908,7 @@ function CancelHome({ job, onClose, onDone }: { job: Job; onClose: () => void; o
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(`${job.job_number} cancelled`, () =>
+          void run(`${job.job_number} cancelled`, () =>
             api.cancelJob(job.id, { reason, note: note || undefined }),
           );
         }}
@@ -944,7 +944,7 @@ function CancelHome({ job, onClose, onDone }: { job: Job; onClose: () => void; o
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Keep it
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Cancelling…" : "Cancel the home"}
           </button>
         </div>
@@ -970,14 +970,14 @@ function PermitDialog({ job, onClose, onDone }: { job: Job; onClose: () => void;
         onSubmit={(e) => {
           e.preventDefault();
           if (applying) {
-            run(`${job.job_number} in permitting`, () =>
+            void run(`${job.job_number} in permitting`, () =>
               api.applyForPermit(job.id, {
                 permit_number: number || undefined,
                 permit_applied_on: when,
               }),
             );
           } else {
-            run(`Permit recorded for ${job.job_number}`, () =>
+            void run(`Permit recorded for ${job.job_number}`, () =>
               api.permitIssued(job.id, { number, issued_on: when }),
             );
           }
@@ -1007,7 +1007,7 @@ function PermitDialog({ job, onClose, onDone }: { job: Job; onClose: () => void;
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : applying ? "Record the application" : "Record the permit"}
           </button>
         </div>
@@ -1123,7 +1123,7 @@ function EditHome({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Save changes"}
           </button>
         </div>

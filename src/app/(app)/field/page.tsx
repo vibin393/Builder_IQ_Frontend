@@ -761,7 +761,7 @@ function NewPunch({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Defect added", () =>
+          void run("Defect added", () =>
             api.createPunchItem({
               job_id: jobId,
               description,
@@ -825,7 +825,7 @@ function NewPunch({
           </select>
         </Field>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={walkthrough} onChange={(e) => setWalkthrough(e.target.checked)} />
+          <input type="checkbox" checked={walkthrough} onChange={(e) => setWalkthrough(e.target.checked)} />{" "}
           Raised by the buyer at the walkthrough
         </label>
         {error && <ErrorNote message={error} />}
@@ -833,7 +833,7 @@ function NewPunch({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Adding…" : "Add"}
           </button>
         </div>
@@ -863,7 +863,7 @@ function AssignPunch({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Assigned", () =>
+          void run("Assigned", () =>
             api.assignPunch(item.id, { vendor_id: vendorId, due_date: due || undefined }),
           );
         }}
@@ -890,7 +890,7 @@ function AssignPunch({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Assign"}
           </button>
         </div>
@@ -923,7 +923,7 @@ function EditPunch({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Saved", () =>
+          void run("Saved", () =>
             api.updatePunchItem(item.id, {
               description,
               location: location || null,
@@ -981,7 +981,7 @@ function EditPunch({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Save"}
           </button>
         </div>
@@ -1037,7 +1037,7 @@ function PunchReason({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(copy.done, copy.call);
+          void run(copy.done, copy.call);
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1058,7 +1058,7 @@ function PunchReason({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Back
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : copy.label}
           </button>
         </div>
@@ -1091,7 +1091,7 @@ function NewInspection({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Inspection booked", () =>
+          void run("Inspection booked", () =>
             api.createInspection({
               job_id: jobId,
               name,
@@ -1139,7 +1139,7 @@ function NewInspection({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Booking…" : "Book it"}
           </button>
         </div>
@@ -1280,7 +1280,7 @@ function Checklist({
                 </option>
               ))}
             </select>
-            <button className="btn btn-primary btn-sm">Add</button>
+            <button type="submit" className="btn btn-primary btn-sm">Add</button>
           </form>
         ) : (
           <p className="border-t pt-3 text-xs" style={{ borderColor: "var(--border)", color: "var(--fg-subtle)" }}>
@@ -1319,7 +1319,7 @@ function RecordOutcome({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Result recorded", () =>
+          void run("Result recorded", () =>
             api.recordInspectionResult(inspection.id, {
               result,
               failure_reason: reason || undefined,
@@ -1357,7 +1357,7 @@ function RecordOutcome({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Record it"}
           </button>
         </div>
@@ -1385,7 +1385,7 @@ function BookReinspection({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Re-inspection booked", () =>
+          void run("Re-inspection booked", () =>
             api.scheduleReinspection(inspection.id, {
               scheduled_date: when,
               fee: fee || undefined,
@@ -1411,7 +1411,7 @@ function BookReinspection({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Booking…" : "Book it"}
           </button>
         </div>
@@ -1446,7 +1446,7 @@ function NewLog({
         className="max-h-[70vh] space-y-4 overflow-y-auto pr-1"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Log filed", () =>
+          void run("Log filed", () =>
             api.createDailyLog({
               job_id: jobId,
               log_date: when,
@@ -1500,7 +1500,7 @@ function NewLog({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Filing…" : "File it"}
           </button>
         </div>

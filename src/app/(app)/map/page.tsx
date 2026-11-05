@@ -211,7 +211,7 @@ export default function MapPage() {
           </button>
         ))}
         <span className="ml-2 inline-flex items-center gap-1.5 text-xs" style={{ color: "var(--fg-subtle)" }}>
-          <span style={{ width: 10, height: 10, borderRadius: 9999, background: "#2563eb", display: "inline-block" }} /> Homes
+          <span style={{ width: 10, height: 10, borderRadius: 9999, background: "#2563eb", display: "inline-block" }} /> Homes{" "}
           <span style={{ width: 10, height: 10, borderRadius: 9999, background: "#d97706", display: "inline-block", marginLeft: 8 }} /> Leads
         </span>
         <span className="ml-auto inline-flex gap-1">

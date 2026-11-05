@@ -157,7 +157,7 @@ export default function WarrantyPage() {
                 type="checkbox"
                 checked={!!filters.overdue}
                 onChange={(e) => setFilters((f) => ({ ...f, overdue: e.target.checked || undefined }))}
-              />
+              />{" "}
               Overdue only
             </label>
           </div>

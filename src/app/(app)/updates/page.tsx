@@ -97,7 +97,7 @@ export default function UpdatesPage() {
                 <li key={i} className="relative">
                   <span className="absolute -left-[1.42rem] top-1.5 h-2.5 w-2.5 rounded-full" style={{ background: "var(--brand)" }} />
                   <div className="flex items-center gap-2">
-                    <Badge tone={KIND_TONE[e.kind] ?? "neutral"}>{e.kind.replace(/_/g, " ")}</Badge>
+                    <Badge tone={KIND_TONE[e.kind] ?? "neutral"}>{e.kind.replaceAll("_", " ")}</Badge>
                     <span className="text-sm font-medium">{e.title}</span>
                     <span className="text-xs" style={{ color: "var(--fg-subtle)" }}>· {when(e.at)}</span>
                   </div>
@@ -137,10 +137,10 @@ export default function UpdatesPage() {
 
       <Modal open={postOpen} title="Post a client update" onClose={() => setPostOpen(false)}>
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={post.title} onChange={(e) => setPost({ ...post, title: e.target.value })} autoFocus /></Field>
+          <Field label="Title"><input className="input" value={post.title} onChange={(e) => setPost({ ...post, title: e.target.value })} /></Field>
           <Field label="Update"><textarea className="input" rows={4} value={post.body} onChange={(e) => setPost({ ...post, body: e.target.value })} /></Field>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={post.is_published} onChange={(e) => setPost({ ...post, is_published: e.target.checked })} />
+            <input type="checkbox" checked={post.is_published} onChange={(e) => setPost({ ...post, is_published: e.target.checked })} />{" "}
             Publish to the owner&apos;s portal now
           </label>
         </div>

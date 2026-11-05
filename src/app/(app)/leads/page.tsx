@@ -403,7 +403,7 @@ export default function LeadsPage() {
                   setShowArchived(e.target.checked);
                   setPage(1);
                 }}
-              />
+              />{" "}
               Include archived leads
             </label>
           </div>
@@ -1149,11 +1149,11 @@ function CaptureLead({
           </div>
           <div className="flex flex-wrap gap-5 text-sm">
             <label className="flex items-center gap-2">
-              <input type="checkbox" checked={form.is_prequalified} onChange={set("is_prequalified")} />
+              <input type="checkbox" checked={form.is_prequalified} onChange={set("is_prequalified")} />{" "}
               Prequalified
             </label>
             <label className="flex items-center gap-2">
-              <input type="checkbox" checked={form.has_home_to_sell} onChange={set("has_home_to_sell")} />
+              <input type="checkbox" checked={form.has_home_to_sell} onChange={set("has_home_to_sell")} />{" "}
               Has a home to sell
             </label>
           </div>

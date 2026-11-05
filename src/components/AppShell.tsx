@@ -294,7 +294,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isStaff) return;
     let cancelled = false;
-    Promise.all([
+    void Promise.all([
       api.dashboard().catch(() => null),
       api.listPurchaseOrders({ status: "draft" }).catch(() => []),
       api.listInvoices({ status: "received" }).catch(() => []),

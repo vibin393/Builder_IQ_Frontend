@@ -599,7 +599,7 @@ export default function CompliancePage() {
               </div>
             )}
             <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="conditional" defaultChecked={approving.missing_required.length > 0} />
+              <input type="checkbox" name="conditional" defaultChecked={approving.missing_required.length > 0} />{" "}
               Approve conditionally — cleared, but with a cap or a caveat
             </label>
             <Field label="Single-job limit ($)" hint="Leave blank to keep the current limit.">

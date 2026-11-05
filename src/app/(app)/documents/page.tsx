@@ -269,7 +269,7 @@ export default function DocumentsPage() {
                     type="checkbox"
                     checked={expiringOnly}
                     onChange={(e) => setExpiringOnly(e.target.checked)}
-                  />
+                  />{" "}
                   Expiring
                 </label>
               </div>

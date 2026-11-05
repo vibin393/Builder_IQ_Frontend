@@ -392,7 +392,7 @@ function ContactDialog({
           </Field>
         </div>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={f.is_primary} onChange={(e) => setF({ ...f, is_primary: e.target.checked })} />
+          <input type="checkbox" checked={f.is_primary} onChange={(e) => setF({ ...f, is_primary: e.target.checked })} />{" "}
           Main contact — the trade record&apos;s contact details follow this person
         </label>
         {error && <ErrorNote message={error} />}

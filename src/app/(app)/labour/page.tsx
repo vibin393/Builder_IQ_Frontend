@@ -324,7 +324,7 @@ export default function LabourPage() {
                 type="checkbox"
                 checked={pendingOnly}
                 onChange={(e) => setPendingOnly(e.target.checked)}
-              />
+              />{" "}
               Awaiting approval
             </label>
             {selected.size > 0 && (
@@ -833,7 +833,7 @@ function RecordTime({
         className="max-h-[70vh] space-y-4 overflow-y-auto pr-1"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Recorded", () =>
+          void run("Recorded", () =>
             api.createTimecard({
               job_id: jobId,
               worker_name: worker,
@@ -962,7 +962,7 @@ function RecordTime({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Recording…" : "Record it"}
           </button>
         </div>
@@ -1000,7 +1000,7 @@ function EditTime({
         className="max-h-[70vh] space-y-4 overflow-y-auto pr-1"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Saved", () =>
+          void run("Saved", () =>
             api.updateTimecard(card.id, {
               worker_name: worker,
               worked_on: when,
@@ -1094,7 +1094,7 @@ function EditTime({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Save"}
           </button>
         </div>
@@ -1131,7 +1131,7 @@ function SetTargets({
         className="max-h-[70vh] space-y-4 overflow-y-auto pr-1"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Targets saved", () =>
+          void run("Targets saved", () =>
             api.setBudgetedHours(
               jobId,
               codes.map((r) => ({
@@ -1185,7 +1185,7 @@ function SetTargets({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy || codes.length === 0}>
+          <button type="submit" className="btn btn-primary" disabled={busy || codes.length === 0}>
             {busy ? "Saving…" : "Save targets"}
           </button>
         </div>

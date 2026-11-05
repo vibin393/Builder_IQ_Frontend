@@ -379,7 +379,7 @@ export default function SafetyPage() {
               type="checkbox"
               checked={openOnly}
               onChange={(e) => setOpenOnly(e.target.checked)}
-            />
+            />{" "}
             Open only
           </label>
         )}
@@ -389,7 +389,7 @@ export default function SafetyPage() {
               type="checkbox"
               checked={riddorOnly}
               onChange={(e) => setRiddorOnly(e.target.checked)}
-            />
+            />{" "}
             Awaiting an HSE report
           </label>
         )}
@@ -1049,7 +1049,7 @@ function NewObservation({
         className="max-h-[70vh] space-y-4 overflow-y-auto pr-1"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Raised", () =>
+          void run("Raised", () =>
             api.createObservation({
               job_id: jobId,
               title,
@@ -1145,7 +1145,7 @@ function NewObservation({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Raising…" : "Raise it"}
           </button>
         </div>
@@ -1177,7 +1177,7 @@ function EditObservation({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Saved", () =>
+          void run("Saved", () =>
             api.updateObservation(obs.id, {
               title,
               location: location || null,
@@ -1220,7 +1220,7 @@ function EditObservation({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Save"}
           </button>
         </div>
@@ -1250,7 +1250,7 @@ function AssignObservation({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Assigned", () =>
+          void run("Assigned", () =>
             api.assignObservation(obs.id, { vendor_id: vendorId, due_on: due || undefined }),
           );
         }}
@@ -1276,7 +1276,7 @@ function AssignObservation({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Assign"}
           </button>
         </div>
@@ -1303,7 +1303,7 @@ function SubmitFix({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Sent for review", () => api.submitObservation(obs.id, resolution));
+          void run("Sent for review", () => api.submitObservation(obs.id, resolution));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1327,7 +1327,7 @@ function SubmitFix({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Sending…" : "Send for review"}
           </button>
         </div>
@@ -1375,7 +1375,7 @@ function ObservationReason({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(copy.done, copy.call);
+          void run(copy.done, copy.call);
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1397,7 +1397,7 @@ function ObservationReason({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Back
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : copy.label}
           </button>
         </div>
@@ -1457,7 +1457,7 @@ function NewIncident({
         className="max-h-[70vh] space-y-4 overflow-y-auto pr-1"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Recorded", () =>
+          void run("Recorded", () =>
             api.createIncident({
               job_id: jobId,
               incident_type: type,
@@ -1563,11 +1563,11 @@ function NewIncident({
         </Field>
         <div className="flex flex-wrap gap-4 text-sm">
           <label className="flex items-center gap-2">
-            <input type="checkbox" checked={lostTime} onChange={(e) => setLostTime(e.target.checked)} />
+            <input type="checkbox" checked={lostTime} onChange={(e) => setLostTime(e.target.checked)} />{" "}
             More than seven days off work
           </label>
           <label className="flex items-center gap-2">
-            <input type="checkbox" checked={treatment} onChange={(e) => setTreatment(e.target.checked)} />
+            <input type="checkbox" checked={treatment} onChange={(e) => setTreatment(e.target.checked)} />{" "}
             Needed medical treatment
           </label>
         </div>
@@ -1616,7 +1616,7 @@ function NewIncident({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Recording…" : "Record it"}
           </button>
         </div>
@@ -1643,7 +1643,7 @@ function ClassifyIncident({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Reclassified", () => api.classifyIncident(incident.id, category));
+          void run("Reclassified", () => api.classifyIncident(incident.id, category));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1667,7 +1667,7 @@ function ClassifyIncident({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Save"}
           </button>
         </div>
@@ -1695,7 +1695,7 @@ function RecordHseReport({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Report recorded", () =>
+          void run("Report recorded", () =>
             api.recordHseReport(incident.id, {
               reported_on: when,
               reference: reference || undefined,
@@ -1742,7 +1742,7 @@ function RecordHseReport({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Record it"}
           </button>
         </div>
@@ -1769,7 +1769,7 @@ function RecordRootCause({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Recorded", () => api.recordRootCause(incident.id, cause));
+          void run("Recorded", () => api.recordRootCause(incident.id, cause));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1792,7 +1792,7 @@ function RecordRootCause({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Record it"}
           </button>
         </div>
@@ -1825,7 +1825,7 @@ function NewPlan({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Created", () =>
+          void run("Created", () =>
             api.createActionPlan({
               name,
               description: description || undefined,
@@ -1854,7 +1854,7 @@ function NewPlan({
           />
         </Field>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={isTemplate} onChange={(e) => setIsTemplate(e.target.checked)} />
+          <input type="checkbox" checked={isTemplate} onChange={(e) => setIsTemplate(e.target.checked)} />{" "}
           A template, to run on many homes
         </label>
         {isTemplate ? (
@@ -1884,7 +1884,7 @@ function NewPlan({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Creating…" : "Create"}
           </button>
         </div>
@@ -1916,7 +1916,7 @@ function StartPlan({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Started", () =>
+          void run("Started", () =>
             api.startActionPlan(template.id, { job_id: jobId, due_on: due || undefined }),
           );
         }}
@@ -1945,7 +1945,7 @@ function StartPlan({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Starting…" : "Start it"}
           </button>
         </div>
@@ -2119,10 +2119,10 @@ function PlanSteps({
                 type="checkbox"
                 checked={needsSignoff}
                 onChange={(e) => setNeedsSignoff(e.target.checked)}
-              />
+              />{" "}
               Witness
             </label>
-            <button className="btn btn-primary btn-sm">Add</button>
+            <button type="submit" className="btn btn-primary btn-sm">Add</button>
           </form>
         ) : (
           <p

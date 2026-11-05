@@ -382,7 +382,7 @@ export default function MeetingsPage() {
       {tab === "Correspondence" && (
         <div className="space-y-4">
           <label className="flex items-center gap-1.5 text-sm">
-            <input type="checkbox" checked={awaitingOnly} onChange={(e) => setAwaitingOnly(e.target.checked)} />
+            <input type="checkbox" checked={awaitingOnly} onChange={(e) => setAwaitingOnly(e.target.checked)} />{" "}
             Awaiting a reply only
           </label>
           <Card title="Correspondence log" padded={false}>

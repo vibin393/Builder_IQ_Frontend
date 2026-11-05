@@ -211,7 +211,7 @@ export default function SubmittalsPage() {
                 type="checkbox"
                 checked={atRiskOnly}
                 onChange={(e) => setAtRiskOnly(e.target.checked)}
-              />
+              />{" "}
               At risk only
             </label>
           </div>
@@ -403,7 +403,7 @@ export default function SubmittalsPage() {
             <textarea name="description" className="input" rows={2} />
           </Field>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="submit_now" defaultChecked />
+            <input type="checkbox" name="submit_now" defaultChecked />{" "}
             Submit for review now (otherwise saved as a draft)
           </label>
           <p className="text-xs" style={{ color: "var(--fg-subtle)" }}>

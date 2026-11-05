@@ -1726,12 +1726,11 @@ const PREFIXES: [RegExp, (rest: string) => Explanation][] = [
 
 /** The explanation for a label on a route, if there is one. */
 export function explain(pathname: string, label: string): Explanation | null {
-  const key = label
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .replace(/[.…]+$/, "")
-    .replace(/\s*\(\d+\)$/, "");   // drop a trailing count, e.g. "Overdue (3)"
+  let key = label.trim().toLowerCase().replace(/\s+/g, " ");
+  // Drop trailing dots / ellipsis, then a trailing count like "Overdue (3)".
+  // Written without end-anchored quantifiers so there is no backtracking risk.
+  while (key.endsWith(".") || key.endsWith("…")) key = key.slice(0, -1);
+  key = key.replace(/\(\d+\)$/, "").trimEnd();
   if (!key) return null;
 
   const root = "/" + pathname.split("/").filter(Boolean)[0];

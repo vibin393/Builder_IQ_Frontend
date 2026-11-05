@@ -172,10 +172,13 @@ export function ConfirmDialog({
   if (!open) return null;
 
   return (
-    <div className="overlay" onClick={onClose}>
+    <div
+      className="overlay"
+      role="presentation"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
       <div
         className="card overlay-panel max-w-md p-6"
-        onClick={(e) => e.stopPropagation()}
         role="alertdialog"
         aria-modal="true"
       >

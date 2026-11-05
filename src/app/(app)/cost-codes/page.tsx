@@ -107,7 +107,7 @@ export default function CostCodesPage() {
               setArchived(e.target.checked);
               setPage(1);
             }}
-          />
+          />{" "}
           Include archived
         </label>
         {s && (

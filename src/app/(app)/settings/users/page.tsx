@@ -391,7 +391,7 @@ function ResetDialog({ user, onClose }: { user: User; onClose: () => void }) {
           Their current password stops working at once.
         </p>
         <Field label="New temporary password" hint="At least 8 characters.">
-          <input className="input" type="text" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} maxLength={128} autoFocus />
+          <input className="input" type="text" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} maxLength={128} />
         </Field>
         {error && <ErrorNote message={error} />}
         <div className="flex justify-end gap-2">

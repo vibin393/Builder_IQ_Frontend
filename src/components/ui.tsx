@@ -46,7 +46,7 @@ export function day(value: string | null | undefined): string {
 }
 
 export function titleCase(value: string): string {
-  return value.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  return value.replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 /* ---------------------------------------------------------------- layout */
@@ -370,10 +370,13 @@ export function Modal({
   if (!open || !mounted) return null;
 
   return createPortal(
-    <div className="overlay" onClick={onClose}>
+    <div
+      className="overlay"
+      role="presentation"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
       <div
         className="card overlay-panel max-w-lg p-6"
-        onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >

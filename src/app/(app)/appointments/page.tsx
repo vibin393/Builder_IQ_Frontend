@@ -904,7 +904,7 @@ function BookAppointment({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Appointment booked", () =>
+          void run("Appointment booked", () =>
             api.bookAppointment({
               job_id: jobId,
               scheduled_for: new Date(when).toISOString(),
@@ -984,7 +984,7 @@ function BookAppointment({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy || !eligible.length}>
+          <button type="submit" className="btn btn-primary" disabled={busy || !eligible.length}>
             {busy ? "Booking…" : "Book it"}
           </button>
         </div>
@@ -1015,7 +1015,7 @@ function Reschedule({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Appointment moved", () =>
+          void run("Appointment moved", () =>
             api.rescheduleAppointment(appointment.id, {
               scheduled_for: new Date(when).toISOString(),
               note: note || undefined,
@@ -1049,7 +1049,7 @@ function Reschedule({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Moving…" : "Move it"}
           </button>
         </div>
@@ -1076,7 +1076,7 @@ function SetCutoff({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Cutoff set", () => api.setStructuralCutoff(appointment.id, cutoff));
+          void run("Cutoff set", () => api.setStructuralCutoff(appointment.id, cutoff));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1098,7 +1098,7 @@ function SetCutoff({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Set it"}
           </button>
         </div>
@@ -1151,7 +1151,7 @@ function RecordOutcome({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(copy.done, copy.call);
+          void run(copy.done, copy.call);
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1165,7 +1165,7 @@ function RecordOutcome({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Back
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : copy.label}
           </button>
         </div>
@@ -1198,7 +1198,7 @@ function RequestSignature({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(sendNow ? "Sent for signature" : "Draft created", async () => {
+          void run(sendNow ? "Sent for signature" : "Draft created", async () => {
             const req = await api.createSignatureRequest({
               job_id: jobId,
               document_kind: kind,
@@ -1257,7 +1257,7 @@ function RequestSignature({
         </Field>
 
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={sendNow} onChange={(e) => setSendNow(e.target.checked)} />
+          <input type="checkbox" checked={sendNow} onChange={(e) => setSendNow(e.target.checked)} />{" "}
           Send it straight away
         </label>
 
@@ -1266,7 +1266,7 @@ function RequestSignature({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : sendNow ? "Create and send" : "Save as draft"}
           </button>
         </div>
@@ -1301,7 +1301,7 @@ function DeclineOrVoid({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run(declining ? "Recorded as declined" : "Document withdrawn", () =>
+          void run(declining ? "Recorded as declined" : "Document withdrawn", () =>
             declining
               ? api.declineSignature(request.id, reason)
               : api.voidSignature(request.id, reason),
@@ -1330,7 +1330,7 @@ function DeclineOrVoid({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Back
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : declining ? "Record the decline" : "Withdraw it"}
           </button>
         </div>
@@ -1359,7 +1359,7 @@ function EditAllowance({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          run("Allowance updated", () => api.setAllowance(jobId, amount));
+          void run("Allowance updated", () => api.setAllowance(jobId, amount));
         }}
       >
         <p className="text-sm" style={{ color: "var(--fg-muted)" }}>
@@ -1385,7 +1385,7 @@ function EditAllowance({
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button type="submit" className="btn btn-primary" disabled={busy}>
             {busy ? "Saving…" : "Save"}
           </button>
         </div>
